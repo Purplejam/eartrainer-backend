@@ -1,0 +1,335 @@
+[{
+	"testId":"639e1e922c4bed1127bf05d6",
+	"tests": [
+	{
+		"audio": "audio/intervals-01/01.mp3",
+		"correct": "Квинта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Терция"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/02.mp3",
+		"correct":"Кварта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Терция"
+			}
+		]
+	}, 
+	{
+		"audio": "audio/intervals-01/03.mp3",
+		"correct": "Большая терция",
+		"question": "Малая терция, большая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Малая терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	}, 
+	{
+		"audio": "audio/intervals-01/04.mp3",
+		"correct": "Кварта",
+		"question": "Малая терция, большая терция или кварта",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Терция"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/05.mp3",
+		"correct": "Малая терция",
+		"question": "Малая терция, большая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Малая терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/06.mp3",
+		"correct": "Квинта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Терция"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/07.mp3",
+		"correct": "Малая терция",
+		"question": "Малая терция, большая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Малая терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/08.mp3",
+		"correct": "Кварта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Терция"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/09.mp3",
+		"correct": "Большая терция",
+		"question": "Квинта, малая терция или большая терция?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Малая терция"
+			},
+			{
+							"answer": "Квинта"
+			}
+		]
+	},
+	{
+		"audio": "audio/intervals-01/10.mp3",
+		"correct": "Квинта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/11.mp3",
+		"correct": "Кварта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/12.mp3",
+		"correct": "Секунда",
+		"question": "Секунда, терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Секунда"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/13.mp3",
+		"correct": "Кварта",
+		"question": "Большая терция, малая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Малая терция"
+			}
+		]
+	}, 
+	{
+	
+		"audio": "audio/intervals-01/14.mp3",
+		"correct": "Малая терция",
+		"question": "Большая терция, малая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Малая терция"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/15.mp3",
+		"correct":"Кварта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/16.mp3",
+		"correct": "Квинта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/17.mp3",
+		"correct": "Большая терция",
+		"question": "Большая терция, малая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Малая терция"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/18.mp3",
+		"correct": "Секунда",
+		"question": "Секунда, терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Секунда"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/19.mp3",
+		"correct": "Кварта",
+		"question": "Квинта, кварта или терция?",
+		"answers": [
+			{	
+							"answer": "Квинта"
+			},
+			{
+							"answer": "Терция"
+			},
+			{
+							"answer": "Кварта"
+			}
+		]
+	},
+	{
+	
+		"audio": "audio/intervals-01/20.mp3",
+		"correct": "Большая терция",
+		"question": "Большая терция, малая терция или кварта?",
+		"answers": [
+			{	
+							"answer": "Большая терция"
+			},
+			{
+							"answer": "Кварта"
+			},
+			{
+							"answer": "Малая терция"
+			}
+		]
+	}                   
+	]
+}]
