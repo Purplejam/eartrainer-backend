@@ -48,26 +48,24 @@ TestListSchema.methods.compareAnswers = async function(answerList) {
 	let result = []
 	let succeededTests = 0
 
-	for (let i = 0; i < answerList.length; i++) {
-		let answerObject = {isCorrect: false}
-
+	for (let answer in answerList) {
 		for (let k = 0; k < testsData.length; k++) {
-			if (answerList[i].answerId === testsData[k].id) {
+			let answerObject = {isCorrect: false}
+			if (answerList[answer].answerId === testsData[k].id) {
 				answerObject.id = testsData[k].id
-				answerObject.usersAnswer = answerList[i].answer
+				answerObject.usersAnswer = answerList[answer].answer
 				answerObject.correct = testsData[k].correct
 				answerObject.audio = testsData[k].audio
 				answerObject.question = testsData[k].question
-				if (answerList[i].answer === testsData[k].correct) {
+				if (answerList[answer].answer === testsData[k].correct) {
 					answerObject.isCorrect = true
 					succeededTests++
 				}
+				result.push(answerObject)
 				break
 			}
 		}
-		result.push(answerObject)
 	}
-
 	return {result, succeededTests}
 }
 

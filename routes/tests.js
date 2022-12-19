@@ -4,7 +4,7 @@ const {getAllTests, getSingleTest, compareAnswers} = require('../controllers/tes
 
 
 router.route('/').get(getAllTests)
-router.route('/compare').get(compareAnswers)
+router.route('/compare').post(compareAnswers)
 router.route('/:id').get(getSingleTest)
 
 
