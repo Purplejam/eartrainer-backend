@@ -12,6 +12,8 @@ const errorHandlerMiddleware = require('./middleware/error-handler')
 
 app.use(express.json())
 
+app.set('trust proxy', 1)
+
 // extra packages
 const cors = require('cors')
 
