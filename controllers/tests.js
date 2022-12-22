@@ -5,13 +5,54 @@ const CustomError = require('../errors/index')
 
 
 const getAllTests = async (req, res) => {
-	const {name, technique, complexity} = req.body
-	let queryObject = {}
- if (name) queryObject.name = name
- if (technique) queryObject.technique = technique
- if (complexity) queryObject.complexity = complexity
+	const {technique, complexity, sorting} = req.query
 
-	let tests = await Test.find(queryObject)
+	let queryObject = {}
+
+ if (complexity && complexity !== '' && complexity !== 'Все') {
+ 	if (complexity === 'Новичок') {
+ 		queryObject.complexity = {$gt: 1, $lt: 5}
+ 	}
+ 	else if (complexity === 'Средний') {
+ 		console.log(true)
+ 		queryObject.complexity = {$gt: 3, $lt: 6}
+ 	}
+ 	else if (complexity === 'Продвинутый') {
+ 		queryObject.complexity = {$gt: 5}
+ 	}
+ 	else {
+ 		console.log(true)
+ 		queryObject.complexity = {$gt: 0}
+ 	} 
+ }
+
+ if (technique && technique !== '' && technique !== 'Все') {
+ 	queryObject.technique = technique
+ }
+ 
+
+ let result = Test.find(queryObject)
+
+	if (sorting && sorting !== '') {
+		if (sorting === 'Сначала новые') {
+			result = result.sort('-createdAt')
+		}
+		else if (sorting === 'Сначала старые') {
+			result = result.sort('createdAt')
+		}
+		else if (sorting === 'Сначала простые') {
+			result = result.sort('complexity')
+		}
+		else if (sorting === 'Сначала сложные') {
+			result = result.sort('-complexity')
+		}
+		else {
+			result = result.sort('createdAt')
+		}
+	} 
+
+	let tests = await result
+
 	res.status(StatusCodes.OK).json(tests)
 }
 
