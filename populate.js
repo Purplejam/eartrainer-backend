@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const mocksData = require('./testList-data-beginner.json')
+const mocksData = require('./testList-data-sync.json')
 
 const {Test, TestList} = require('./models/Test')
 const connectDB = require('./db/connect')

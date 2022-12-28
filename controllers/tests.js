@@ -5,23 +5,20 @@ const CustomError = require('../errors/index')
 
 
 const getAllTests = async (req, res) => {
-	const {technique, complexity, sorting} = req.query
+	const {technique, complexity} = req.query
 
 	let queryObject = {}
-
  if (complexity && complexity !== '' && complexity !== 'Все') {
  	if (complexity === 'Новичок') {
  		queryObject.complexity = {$gt: 1, $lt: 5}
  	}
  	else if (complexity === 'Средний') {
- 		console.log(true)
  		queryObject.complexity = {$gt: 3, $lt: 6}
  	}
  	else if (complexity === 'Продвинутый') {
  		queryObject.complexity = {$gt: 5}
  	}
  	else {
- 		console.log(true)
  		queryObject.complexity = {$gt: 0}
  	} 
  }
@@ -30,30 +27,34 @@ const getAllTests = async (req, res) => {
  	queryObject.technique = technique
  }
  
-
  let result = Test.find(queryObject)
 
-	if (sorting && sorting !== '') {
-		if (sorting === 'Сначала новые') {
+ const page = Number(req.query.page) || 1
+ const limit = Number(req.query.limit) || 8
+ const skip = (page - 1) * limit
+
+	if (req.query.sorting && req.query.sorting !== '') {
+		if (req.query.sorting === 'Сначала новые') {
 			result = result.sort('-createdAt')
 		}
-		else if (sorting === 'Сначала старые') {
+		else if (req.query.sorting === 'Сначала старые') {
 			result = result.sort('createdAt')
 		}
-		else if (sorting === 'Сначала простые') {
+		else if (req.query.sorting === 'Сначала простые') {
 			result = result.sort('complexity')
 		}
-		else if (sorting === 'Сначала сложные') {
+		else if (req.query.sorting === 'Сначала сложные') {
 			result = result.sort('-complexity')
 		}
-		else {
-			result = result.sort('createdAt')
-		}
-	} 
+	} else {
+		result = result.sort('complexity')
+	}
 
+	result = result.skip(skip).limit(limit) 
+
+	const totalTests  = await Test.countDocuments(queryObject)
 	let tests = await result
-
-	res.status(StatusCodes.OK).json(tests)
+	res.status(StatusCodes.OK).json({tests, totalTests})
 }
 
 
