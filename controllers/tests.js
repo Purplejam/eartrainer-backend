@@ -5,9 +5,9 @@ const CustomError = require('../errors/index')
 
 
 const getAllTests = async (req, res) => {
-	const {technique, complexity} = req.query
-
+	const {technique, complexity, name} = req.query
 	let queryObject = {}
+	
  if (complexity && complexity !== '' && complexity !== 'Все') {
  	if (complexity === 'Новичок') {
  		queryObject.complexity = {$gt: 1, $lt: 5}
@@ -26,6 +26,10 @@ const getAllTests = async (req, res) => {
  if (technique && technique !== '' && technique !== 'Все') {
  	queryObject.technique = technique
  }
+
+ if (name && name !== '') {
+ 	queryObject.name = { $regex: name, $options: 'i' }
+ } 
  
  let result = Test.find(queryObject)
 
