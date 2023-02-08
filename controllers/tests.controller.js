@@ -29,14 +29,16 @@ const getSingleTest = async (req, res) => {
 const compareAnswers = async (req, res) => {
 	const {answerList, testId} = req.body
 	if(!answerList || !testId) {
-		throw new CustomError.BadRequestError('please provide correct data')
+		throw new CustomError.BadRequestError('Please provide correct data')
 	}
 	const testList = await TestList.findOne({testId})
 	if(!testList) {
-		throw new CustomError.BadRequestError('please provide correct test id')
+		throw new CustomError.BadRequestError('Please provide correct test id')
 	}
-
 	const {result, succeededTests} = await testList.compareAnswers(answerList)
+	if(!result) {
+		throw new CustomError.BadRequestError('Cannot find any items. Try again later')
+	}
 	res.status(StatusCodes.OK).json({succeededTests, result})
 }
 

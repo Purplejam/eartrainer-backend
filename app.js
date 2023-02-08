@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('express-async-errors')
 const express = require('express')
-const testRouter = require('./routes/tests')
+const testRouter = require('./routes/testsRouter')
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 const cors = require('cors')
