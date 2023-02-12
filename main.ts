@@ -4,7 +4,7 @@ import {app} from './app'
 
 
 
-export const bootstrap = async () => {
+export const bootstrap = async (): Promise<void> => {
   dotenv.config()
   const port = process.env.PORT || 5000
   try {

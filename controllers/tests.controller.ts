@@ -8,7 +8,7 @@ import {getAllTestsService} from './tests.service'
 import {Request, Response} from 'express'
 
 
-export const getAllTests = async (req: Request, res: Response) => {
+export const getAllTests = async (req: Request, res: Response): Promise<void> => {
 	const {tests, totalTests} = await getAllTestsService(req, res)
 	if (!tests) {
 		throw new NotFoundError('Cannot find any items. Try again later')
@@ -17,7 +17,7 @@ export const getAllTests = async (req: Request, res: Response) => {
 }
 
 
-export const getSingleTest = async (req: Request, res: Response) => {
+export const getSingleTest = async (req: Request, res: Response): Promise<void>  => {
 	const {id: testId} = req.params
 	const testList = await TestList.findOne({testId})
 	if(!testList) {
@@ -27,7 +27,7 @@ export const getSingleTest = async (req: Request, res: Response) => {
 }
 
 
-export const compareAnswers = async (req: Request, res: Response) => {
+export const compareAnswers = async (req: Request, res: Response): Promise<void>  => {
 	const {answerList, testId} = req.body
 	if(!answerList || !testId) {
 		throw new BadRequestError('Please provide correct data')

@@ -10,43 +10,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
-const { Test } = require('../models/TestSchema');
-const { TestList } = require('../models/TestListSchema');
-const { TestItem } = require('../models/TestItemSchema');
-const { StatusCodes } = require('http-status-codes');
-const mongoose = require('mongoose');
-const CustomError = require('../errors/index');
-const { getAllTestsService } = require('./tests.service');
+const TestListSchema_1 = require("../models/TestListSchema");
+const http_status_codes_1 = require("http-status-codes");
+const errors_1 = require("../errors");
+const tests_service_1 = require("./tests.service");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tests, totalTests } = yield getAllTestsService(req, res);
+    const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {
-        throw new CustomError.NotFoundError('Cannot find any items. Try again later');
+        throw new errors_1.NotFoundError('Cannot find any items. Try again later');
     }
-    res.status(StatusCodes.OK).json({ tests, totalTests });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ tests, totalTests });
 });
 exports.getAllTests = getAllTests;
 const getSingleTest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id: testId } = req.params;
-    const testList = yield TestList.findOne({ testId });
+    const testList = yield TestListSchema_1.TestList.findOne({ testId });
     if (!testList) {
-        throw new CustomError.BadRequestError('Please provide correct test id');
+        throw new errors_1.BadRequestError('Please provide correct test id');
     }
-    res.status(StatusCodes.OK).json(testList);
+    res.status(http_status_codes_1.StatusCodes.OK).json(testList);
 });
 exports.getSingleTest = getSingleTest;
 const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { answerList, testId } = req.body;
     if (!answerList || !testId) {
-        throw new CustomError.BadRequestError('Please provide correct data');
+        throw new errors_1.BadRequestError('Please provide correct data');
     }
-    const testList = yield TestList.findOne({ testId });
+    const testList = yield TestListSchema_1.TestList.findOne({ testId });
     if (!testList) {
-        throw new CustomError.BadRequestError('Please provide correct test id');
+        throw new errors_1.BadRequestError('Please provide correct test id');
     }
     const { result, succeededTests } = yield testList.compareAnswers(answerList);
     if (!result) {
-        throw new CustomError.BadRequestError('Cannot find any items. Try again later');
+        throw new errors_1.BadRequestError('Cannot find any items. Try again later');
     }
-    res.status(StatusCodes.OK).json({ succeededTests, result });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ succeededTests, result });
 });
 exports.compareAnswers = compareAnswers;

@@ -4,9 +4,9 @@ import {TestItem} from '../models/TestItemSchema'
 import {testDataMapComplexity, testDataMapSorting} from '../models/testDataMap'
 import {Request, Response} from 'express'
 import {IQueryObject} from './query.interface'
+import {ITestServiceReturn} from './testsService.interface';
 
-
-export const getAllTestsService = async (req: Request, res: Response) => {
+export const getAllTestsService = async (req: Request, res: Response): Promise<ITestServiceReturn> => {
 	const {technique, complexity, name} = req.query
 	let queryObject: IQueryObject = {}
 	const page = Number(req.query.page) || 1
