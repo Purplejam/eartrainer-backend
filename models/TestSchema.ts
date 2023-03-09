@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import {TestListSchema} from './TestListSchema'
 
 export const TestSchema = new mongoose.Schema({
 	slug: {

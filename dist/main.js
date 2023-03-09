@@ -8,16 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bootstrap = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
 const connect_1 = require("./db/connect");
 const app_1 = require("./app");
 const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
-    dotenv_1.default.config();
     const port = process.env.PORT || 5000;
     try {
         yield (0, connect_1.connectDB)(process.env.MONGO_URI);
