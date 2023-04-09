@@ -29,7 +29,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST);
     }
     const origin = 'http://localhost:3000';
-    yield (0, sendEmail_service_1.sendVerificationEmail)(user.email, user.name);
+    yield (0, sendEmail_service_1.sendVerificationEmail)(user.email, user.name, origin, user.verificationToken);
     res.status(http_status_codes_1.StatusCodes.CREATED).json({
         msg: 'Success! Please verify your email',
         verificationToken: user.verificationToken
@@ -67,7 +67,7 @@ const verifyUserEmail = (req, res) => __awaiter(void 0, void 0, void 0, function
         throw new errors_1.UnauthenticatedError('Invalid Credentials');
     }
     if (user.isVerified) {
-        return res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'This user is already verified!' });
+        throw new errors_1.BadRequestError('This user is already verified!');
     }
     if (user.verificationToken !== verificationToken) {
         throw new errors_1.UnauthenticatedError('Invalid Credentials');
@@ -80,7 +80,12 @@ const verifyUserEmail = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 exports.verifyUserEmail = verifyUserEmail;
 const showCurrentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(http_status_codes_1.StatusCodes.OK).json({ user: req.user });
+    if (req.user) {
+        return res.status(http_status_codes_1.StatusCodes.OK).json({ user: req.user });
+    }
+    else {
+        res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'There is no user' });
+    }
 });
 exports.showCurrentUser = showCurrentUser;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,15 +99,15 @@ const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         throw new errors_1.BadRequestError('Please provide a valid email');
     }
     const passwordToken = yield (0, auth_service_1.forgotPasswordService)(email);
-    res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Please check your email for further actions', passwordToken });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Please check your email for further actions' });
 });
 exports.forgotPassword = forgotPassword;
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token, password, email } = req.body;
-    if (!token || !password || !email) {
+    const { passwordToken, password, email } = req.body;
+    if (!passwordToken || !password || !email) {
         throw new errors_1.BadRequestError('Please provide all data');
     }
-    yield (0, auth_service_1.resetPasswordService)(token, password, email);
+    yield (0, auth_service_1.resetPasswordService)(passwordToken, password, email);
     res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Success! Password reset' });
 });
 exports.resetPassword = resetPassword;

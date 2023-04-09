@@ -10,10 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
+const TestSchema_1 = require("../models/TestSchema");
 const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const tests_service_1 = require("./tests.service");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {
@@ -43,6 +45,21 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const { result, succeededTests } = yield testList.compareAnswers(answerList);
     if (!result) {
         throw new errors_1.BadRequestError('Cannot find any items. Try again later');
+    }
+    if (req.user) {
+        const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: req.user.id });
+        const test = yield TestSchema_1.Test.findOne({ _id: testId });
+        console.log(test);
+        const completedTest = yield ProgressDataSchema_1.CompletedTest.create({
+            name: test.name,
+            slug: test.slug,
+            complexity: test.complexity,
+            result: succeededTests,
+            test: test.id
+        });
+        console.log(completedTest);
+        progressData.completedTests.push(completedTest);
+        yield progressData.save();
     }
     res.status(http_status_codes_1.StatusCodes.OK).json({ succeededTests, result });
 });

@@ -34,17 +34,19 @@ const sendEmailSendgrid = (to, subject, text, html) => __awaiter(void 0, void 0,
     });
 });
 exports.sendEmailSendgrid = sendEmailSendgrid;
-const sendVerificationEmail = (email, name) => __awaiter(void 0, void 0, void 0, function* () {
+const sendVerificationEmail = (email, name, origin, verificationToken) => __awaiter(void 0, void 0, void 0, function* () {
+    const verificationLink = `${origin}/verify-email?verificationToken=${verificationToken}&email=${email}`;
     const subject = 'Eartrainer | Подтвертите свой email';
-    const text = 'Перейдите по ссылке ниже для того, чтобы верифицировать свой email';
-    const html = '<strong>А вот и ссылка верификации</strong>';
+    const text = 'Перейдите по ссылке ниже для того подтвержления email';
+    const html = `<strong>Перейдите по ссылке ниже для подтвержления email: <a href=${verificationLink}>Подтвердить email</a></strong>`;
     yield (0, exports.sendEmailSendgrid)(email, subject, text, html);
 });
 exports.sendVerificationEmail = sendVerificationEmail;
-const sendResetPasswordEmail = (email, name, token, origin) => __awaiter(void 0, void 0, void 0, function* () {
+const sendResetPasswordEmail = (email, name, passwordToken, origin) => __awaiter(void 0, void 0, void 0, function* () {
+    const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`;
     const subject = 'Eartrainer | Запрос на смену пароля';
     const text = 'Перейдите по ссылке ниже для того, чтобы подтвердить смену пароля';
-    const html = `<strong>Ваш токен для верификации ${token}</strong>`;
+    const html = `<strong>Для смены пароля перейдите по ссылке: <a href=${verificationLink}>Новый пароль</a></strong>`;
     yield (0, exports.sendEmailSendgrid)(email, subject, text, html);
 });
 exports.sendResetPasswordEmail = sendResetPasswordEmail;

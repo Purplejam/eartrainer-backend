@@ -5,12 +5,12 @@ import {Request, Response} from 'express'
 import {User} from '../models/UserSchema'
 import { sendResetPasswordEmail, sendVerificationEmail } from './sendEmail.service'
 import { attachCookieService, forgotPasswordService, logoutService, registerService, resetPasswordService } from './auth.service';
-import { createTokenUser } from './createTokenUser.service';
-import { Token } from '../models/TokenSchema';
+import { createTokenUser } from './createTokenUser.service'
+import { Token } from '../models/TokenSchema'
 import crypto from 'crypto'
-import { attachCookiesToResponse } from './jwt.service';
-import { ITokenUser } from './createTokenUser.interface';
-import { hashString } from './createHash';
+import { attachCookiesToResponse } from './jwt.service'
+import { ITokenUser } from './createTokenUser.interface'
+import { hashString } from './createHash'
 
 interface IVerifyParams {
   email: string,
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response) => {
   }
 
   const origin = 'http://localhost:3000'
-  await sendVerificationEmail(user.email, user.name)
+  await sendVerificationEmail(user.email, user.name, origin, user.verificationToken)
   res.status(StatusCodes.CREATED).json({
     msg: 'Success! Please verify your email', 
     verificationToken: user.verificationToken
@@ -40,21 +40,21 @@ export const register = async (req: Request, res: Response) => {
 }
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
   if (!email || !password) {
-    throw new BadRequestError('Please provide email and password');
+    throw new BadRequestError('Please provide email and password')
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email })
   if (!user) {
-    throw new UnauthenticatedError('Invalid Credentials');
+    throw new UnauthenticatedError('Invalid Credentials')
   }
-  const isPasswordCorrect = await user.comparePassword(password);
+  const isPasswordCorrect = await user.comparePassword(password)
   if (!isPasswordCorrect) {
-    throw new UnauthenticatedError('Invalid Credentials');
+    throw new UnauthenticatedError('Invalid Credentials')
   }
-  const isUserVerified = user.isVerified;
+  const isUserVerified = user.isVerified
   if (!isUserVerified) {
-    throw new BadRequestError('Please verify your email');
+    throw new BadRequestError('Please verify your email')
   }
   const tokenUser = await attachCookieService(req, res, user)
   return res.status(StatusCodes.OK).json({user: tokenUser})
@@ -67,23 +67,27 @@ export const verifyUserEmail = async (req: Request<{}, {}, {}, IVerifyParams>, r
   }
   const user = await User.findOne({email})
   if (!user) {
-    throw new UnauthenticatedError('Invalid Credentials');
+    throw new UnauthenticatedError('Invalid Credentials')
   }
   if (user.isVerified) {
-    return res.status(StatusCodes.OK).json({msg: 'This user is already verified!'})
+    throw new BadRequestError('This user is already verified!')
   }
   if (user.verificationToken !== verificationToken) {
-    throw new UnauthenticatedError('Invalid Credentials');
+    throw new UnauthenticatedError('Invalid Credentials')
   }
   user.isVerified = true
   user.verified = Date.now()
   user.verificationToken = ''
   await user.save()
-  res.status(StatusCodes.OK).json({msg: 'Success! Email has been verified!'});
+  res.status(StatusCodes.OK).json({msg: 'Success! Email has been verified!'})
 }
 
 export const showCurrentUser = async(req: Request, res: Response) => {
-  res.status(StatusCodes.OK).json({user: req.user})
+  if(req.user) {
+    return res.status(StatusCodes.OK).json({user: req.user})
+  } else {
+    res.status(StatusCodes.OK).json({msg: 'There is no user'})
+  }
 }
 
 export const logout = async(req: Request, res: Response) => {
@@ -97,15 +101,15 @@ export const forgotPassword = async(req: Request, res: Response) => {
     throw new BadRequestError('Please provide a valid email')
   }
   const passwordToken = await forgotPasswordService(email)
-  res.status(StatusCodes.OK).json({ msg: 'Please check your email for further actions',  passwordToken})
+  res.status(StatusCodes.OK).json({ msg: 'Please check your email for further actions'})
 }
 
 export const resetPassword = async(req: Request, res: Response) => {
-  const {token, password, email} = req.body
-  if (!token || !password || !email) {
-    throw new BadRequestError('Please provide all data');
+  const {passwordToken, password, email} = req.body
+  if (!passwordToken || !password || !email) {
+    throw new BadRequestError('Please provide all data')
   }
-  await resetPasswordService(token, password, email)
+  await resetPasswordService(passwordToken, password, email)
   res.status(StatusCodes.OK).json({ msg: 'Success! Password reset' })
 }
 

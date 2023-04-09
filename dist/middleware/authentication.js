@@ -15,6 +15,9 @@ const errors_1 = require("../errors");
 const TokenSchema_1 = require("../models/TokenSchema");
 const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { refreshToken, accessToken } = req.signedCookies;
+    if (!refreshToken && !accessToken) {
+        return next();
+    }
     try {
         if (accessToken) {
             const payload = (0, jwt_service_1.isTokenValid)(accessToken);
@@ -35,7 +38,7 @@ const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             user: payload.user.id,
             refreshToken: payload.refreshToken
         });
-        if (!existingToken || !(existingToken === null || existingToken === void 0 ? void 0 : existingToken.isValue)) {
+        if (!existingToken || !(existingToken === null || existingToken === void 0 ? void 0 : existingToken.isValid)) {
             throw new errors_1.UnauthenticatedError('Authentication Invalid');
         }
         (0, jwt_service_1.attachCookiesToResponse)(res, payload.user, existingToken.refreshToken);

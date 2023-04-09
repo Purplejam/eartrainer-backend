@@ -23,13 +23,13 @@ const attachCookiesToResponse = (res, user, refreshToken) => {
     const oneMonth = 1000 * 60 * 60 * 24 * 30;
     res.cookie('accessToken', accessTokenJWT, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         signed: true,
         expires: new Date(Date.now() + oneDay),
     });
     res.cookie('refreshToken', refreshTokenJWT, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         signed: true,
         expires: new Date(Date.now() + oneMonth)
     });

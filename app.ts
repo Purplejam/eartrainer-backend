@@ -16,7 +16,10 @@ app.use(cookieParser(process.env.JWT_SECRET as string));
 app.set('trust proxy', 1)
 
 //enable cors
-app.use(cors())
+app.use(cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+}))
 
 //static files
 app.use(express.static('public'))

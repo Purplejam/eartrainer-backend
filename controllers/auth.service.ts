@@ -6,13 +6,16 @@ import { createTokenUser } from './createTokenUser.service';
 import { Token } from '../models/TokenSchema';
 import {StatusCodes} from 'http-status-codes'
 import {Request, Response} from 'express'
-import { hashString } from './createHash';
+import { hashString } from './createHash'
+import { sendResetPasswordEmail } from './sendEmail.service';
+import { ProgressData } from '../models/ProgressDataSchema';
 
 export const registerService = async(email: string, name: string, password: string) => {
   const isFirstAccount = (await User.countDocuments({})) === 0
   const role = isFirstAccount ? 'admin' : 'user'
   const verificationToken = crypto.randomBytes(20).toString('hex')
   const user = await User.create({name, email, password, role, verificationToken})
+  const progressData = await ProgressData.create({user: user.id})
   return user
 }
 
@@ -45,7 +48,6 @@ export const logoutService = async(req: Request, res: Response) => {
   await Token.findOneAndDelete({
     user: req.user?.id
   })
-
   res.cookie('accessToken', 'logout', {
     httpOnly: true,
     expires: new Date(Date.now()),
@@ -64,23 +66,22 @@ export const forgotPasswordService = async(email: string) => {
   }
   const passwordToken = crypto.randomBytes(20).toString('hex')
   const origin = 'http://localhost:3000'
-  //await sendResetPasswordEmail(email, user.name, passwordToken, origin)
+  await sendResetPasswordEmail(email, user.name, passwordToken, origin)
   const expOneDay = 1000 * 60 * 60 * 24 * 1
   const passwordTokenExpirationDate = new Date(Date.now() + expOneDay)
   user.passwordToken = hashString(passwordToken)
   user.passwordTokenExpirationDate = passwordTokenExpirationDate
   await user.save()
-  //temporary while on postman
   return passwordToken
 }
 
-export const resetPasswordService = async(token: string, password: string, email: string) => {
+export const resetPasswordService = async(passwordToken: string, password: string, email: string) => {
   const user = await User.findOne({email})
   if (!user) {
     throw new BadRequestError('Please provide avalid email');
   }
   const currentDate = new Date(Date.now())
-  if (user.passwordToken === hashString(token) && 
+  if (user.passwordToken === hashString(passwordToken) && 
     currentDate < user.passwordTokenExpirationDate) {
     user.password = password
     user.passwordTokenExpirationDate = null

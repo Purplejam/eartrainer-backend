@@ -29,14 +29,14 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
 
   res.cookie('accessToken', accessTokenJWT, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     signed: true,
     expires: new Date(Date.now() + oneDay),
   })
 
   res.cookie('refreshToken', refreshTokenJWT, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     signed: true,
     expires: new Date(Date.now() + oneMonth)
   })

@@ -23,18 +23,18 @@ export const sendEmailSendgrid = async (to: string, subject: string, text: strin
 	  })
 }
 
-//change after frontend
-export const sendVerificationEmail = async (email: string, name: string) => {
+export const sendVerificationEmail = async (email: string, name: string, origin: string, verificationToken: string) => {
+	const verificationLink = `${origin}/verify-email?verificationToken=${verificationToken}&email=${email}`
 	const subject = 'Eartrainer | Подтвертите свой email'
-	const text = 'Перейдите по ссылке ниже для того, чтобы верифицировать свой email'
-	const html = '<strong>А вот и ссылка верификации</strong>'
+	const text = 'Перейдите по ссылке ниже для того подтвержления email'
+	const html = `<strong>Перейдите по ссылке ниже для подтвержления email: <a href=${verificationLink}>Подтвердить email</a></strong>`
 	await sendEmailSendgrid(email, subject, text, html)
 }
 
-//change after frontend
-export const sendResetPasswordEmail = async (email: string, name: string, token: string, origin: string) => {
+export const sendResetPasswordEmail = async (email: string, name: string, passwordToken: string, origin: string) => {
+	const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`
 	const subject = 'Eartrainer | Запрос на смену пароля'
 	const text = 'Перейдите по ссылке ниже для того, чтобы подтвердить смену пароля'
-	const html = `<strong>Ваш токен для верификации ${token}</strong>`
+	const html = `<strong>Для смены пароля перейдите по ссылке: <a href=${verificationLink}>Новый пароль</a></strong>`
 	await sendEmailSendgrid(email, subject, text, html)
 }

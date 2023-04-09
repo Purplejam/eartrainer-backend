@@ -20,11 +20,14 @@ const jwt_service_1 = require("./jwt.service");
 const createTokenUser_service_1 = require("./createTokenUser.service");
 const TokenSchema_1 = require("../models/TokenSchema");
 const createHash_1 = require("./createHash");
+const sendEmail_service_1 = require("./sendEmail.service");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const registerService = (email, name, password) => __awaiter(void 0, void 0, void 0, function* () {
     const isFirstAccount = (yield UserSchema_1.User.countDocuments({})) === 0;
     const role = isFirstAccount ? 'admin' : 'user';
     const verificationToken = crypto_1.default.randomBytes(20).toString('hex');
     const user = yield UserSchema_1.User.create({ name, email, password, role, verificationToken });
+    const progressData = yield ProgressDataSchema_1.ProgressData.create({ user: user.id });
     return user;
 });
 exports.registerService = registerService;
@@ -73,6 +76,7 @@ const forgotPasswordService = (email) => __awaiter(void 0, void 0, void 0, funct
     }
     const passwordToken = crypto_1.default.randomBytes(20).toString('hex');
     const origin = 'http://localhost:3000';
+    yield (0, sendEmail_service_1.sendResetPasswordEmail)(email, user.name, passwordToken, origin);
     const expOneDay = 1000 * 60 * 60 * 24 * 1;
     const passwordTokenExpirationDate = new Date(Date.now() + expOneDay);
     user.passwordToken = (0, createHash_1.hashString)(passwordToken);
@@ -81,13 +85,13 @@ const forgotPasswordService = (email) => __awaiter(void 0, void 0, void 0, funct
     return passwordToken;
 });
 exports.forgotPasswordService = forgotPasswordService;
-const resetPasswordService = (token, password, email) => __awaiter(void 0, void 0, void 0, function* () {
+const resetPasswordService = (passwordToken, password, email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield UserSchema_1.User.findOne({ email });
     if (!user) {
         throw new errors_1.BadRequestError('Please provide avalid email');
     }
     const currentDate = new Date(Date.now());
-    if (user.passwordToken === (0, createHash_1.hashString)(token) &&
+    if (user.passwordToken === (0, createHash_1.hashString)(passwordToken) &&
         currentDate < user.passwordTokenExpirationDate) {
         user.password = password;
         user.passwordTokenExpirationDate = null;
