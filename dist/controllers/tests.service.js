@@ -9,9 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTestsService = void 0;
+exports.progressDataService = exports.getAllTestsService = void 0;
 const TestSchema_1 = require("../models/TestSchema");
 const testDataMap_1 = require("../models/testDataMap");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
+const techMap_1 = require("../models/techMap");
 const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { technique, complexity, name } = req.query;
     let queryObject = {};
@@ -47,3 +49,31 @@ const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, funct
     return { tests, totalTests };
 });
 exports.getAllTestsService = getAllTestsService;
+const progressDataService = (req, res, testId, succeededTests) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user) {
+        const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: req.user.id });
+        const test = yield TestSchema_1.Test.findOne({ _id: testId });
+        const completedTest = yield ProgressDataSchema_1.CompletedTest.create({
+            name: test.name,
+            slug: test.slug,
+            complexity: test.complexity,
+            result: succeededTests,
+            test: test.id
+        });
+        progressData.completedTests.push(completedTest);
+        if (techMap_1.techiqueMap.has(test.technique)) {
+            const technique = techMap_1.techiqueMap.get(test.technique);
+            const stats = progressData.stats[`${technique}`];
+            if (succeededTests >= 14 && test.complexity >= stats) {
+                if (succeededTests >= 17) {
+                    progressData.stats[`${technique}`] = test.complexity;
+                }
+                if (succeededTests >= 14 && succeededTests < 17) {
+                    progressData.stats[`${technique}`] += 0.5;
+                }
+            }
+        }
+        yield progressData.save();
+    }
+});
+exports.progressDataService = progressDataService;
