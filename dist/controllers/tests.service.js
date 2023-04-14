@@ -58,6 +58,7 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
             slug: test.slug,
             complexity: test.complexity,
             result: succeededTests,
+            technique: test.technique,
             test: test.id
         });
         progressData.completedTests.push(completedTest);

@@ -35,7 +35,7 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 	}
 	const testList = await TestList.findOne({testId})
 	if(!testList) {
-		throw new BadRequestError('Please provide correct test id')
+		throw new BadRequestError('Please provide correct test ID')
 	}
 	const {result, succeededTests} = await testList.compareAnswers(answerList)
 	if(!result) {
@@ -45,5 +45,14 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 		await progressDataService(req, res, testId, succeededTests)
 	}
 	res.status(StatusCodes.OK).json({succeededTests, result})
+}
+
+export const getProgressData = async (req: Request, res: Response) => {
+	const {userId} = req.query
+	if(!userId) {
+		throw new BadRequestError('Please provide user ID')
+	}
+	const progressData = await ProgressData.findOne({user: userId})
+	res.status(StatusCodes.OK).json({stats: progressData.stats})
 }
 

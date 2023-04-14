@@ -54,6 +54,7 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 			slug: test.slug,
 			complexity: test.complexity,
 			result: succeededTests,
+			technique: test.technique,
 			test: test.id
 		})
 		progressData.completedTests.push(completedTest)

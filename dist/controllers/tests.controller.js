@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
+exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
 const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const tests_service_1 = require("./tests.service");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {
@@ -38,7 +39,7 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     const testList = yield TestListSchema_1.TestList.findOne({ testId });
     if (!testList) {
-        throw new errors_1.BadRequestError('Please provide correct test id');
+        throw new errors_1.BadRequestError('Please provide correct test ID');
     }
     const { result, succeededTests } = yield testList.compareAnswers(answerList);
     if (!result) {
@@ -50,3 +51,12 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     res.status(http_status_codes_1.StatusCodes.OK).json({ succeededTests, result });
 });
 exports.compareAnswers = compareAnswers;
+const getProgressData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.query;
+    if (!userId) {
+        throw new errors_1.BadRequestError('Please provide user ID');
+    }
+    const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: userId });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ stats: progressData.stats });
+});
+exports.getProgressData = getProgressData;

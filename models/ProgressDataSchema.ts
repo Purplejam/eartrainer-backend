@@ -13,6 +13,9 @@ export const CompletedTestSchema = new mongoose.Schema({
 	result: {
 		type: String
 	},
+	technique: {
+		type: String
+	},
 	quantity: {
 		type: String
 	}, 
@@ -33,15 +36,15 @@ export const ProgressDataSchema = new mongoose.Schema({
 	stats: {
 		harmonic: {
 			type: Number,
-			default: 0
+			default: 1
 		},
 		tech: {
 			type: Number,
-			default: 0
+			default: 1
 		},
 		rhythm: {
 			type: Number,
-			default: 0
+			default: 1
 		},
 	}
 })
