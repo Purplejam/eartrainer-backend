@@ -4,9 +4,10 @@ import {TestItem} from '../models/TestItemSchema'
 import {StatusCodes} from 'http-status-codes'
 import mongoose from 'mongoose'
 import {CustomAPIError, BadRequestError, NotFoundError} from '../errors'
-import {getAllTestsService, progressDataService} from './tests.service'
+import {getAllTestsService, progressDataService, progressHistoryService} from './tests.service'
 import {Request, Response} from 'express'
-import { CompletedTest, ProgressData } from '../models/ProgressDataSchema';
+import { ProgressData } from '../models/ProgressDataSchema';
+import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
 
 export const getAllTests = async (req: Request, res: Response): Promise<void> => {
@@ -26,7 +27,6 @@ export const getSingleTest = async (req: Request, res: Response): Promise<void> 
 	}
 	res.status(StatusCodes.OK).json(testList)
 }
-
 
 export const compareAnswers = async (req: Request, res: Response): Promise<void>  => {
 	const {answerList, testId} = req.body
@@ -54,5 +54,15 @@ export const getProgressData = async (req: Request, res: Response) => {
 	}
 	const progressData = await ProgressData.findOne({user: userId})
 	res.status(StatusCodes.OK).json({stats: progressData.stats})
+}
+
+export const getProgressHistory = async (req: Request, res: Response) => {
+	const {userId} = req.query
+	if(!userId) {
+		throw new BadRequestError('Please provide user ID')
+	}
+
+	const {tests, numOfPages} = await progressHistoryService(req, res, userId)
+	res.status(StatusCodes.OK).json({tests, numOfPages})
 }
 

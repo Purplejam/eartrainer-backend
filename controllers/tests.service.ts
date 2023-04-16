@@ -5,8 +5,10 @@ import {testDataMapComplexity, testDataMapSorting} from '../models/testDataMap'
 import {Request, Response} from 'express'
 import {IQueryObject} from './query.interface'
 import {ITestServiceReturn} from './testsService.interface'
-import { CompletedTest, ProgressData } from '../models/ProgressDataSchema'
+import { ProgressData } from '../models/ProgressDataSchema'
+import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
+import { stringParseType } from '../models/interfaces/stringParse.interface';
 
 export const getAllTestsService = async (req: Request, res: Response): Promise<ITestServiceReturn> => {
 	const {technique, complexity, name} = req.query
@@ -41,7 +43,7 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
 
 	result = result.skip(skip).limit(limit) 
 	const tests = await result
-	const totalTests  = await Test.countDocuments(queryObject)
+	const totalTests = await Test.countDocuments(queryObject)
 	return {tests, totalTests}
 }
 
@@ -55,9 +57,9 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 			complexity: test.complexity,
 			result: succeededTests,
 			technique: test.technique,
-			test: test.id
+			test: test.id,
+			user: req.user.id
 		})
-		progressData.completedTests.push(completedTest)
 		//success rate condition
 		if(techiqueMap.has(test.technique)) {
 			const technique = techiqueMap.get(test.technique)
@@ -74,6 +76,20 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 		}
 		await progressData.save()	
 	}
+}
+
+
+export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType) => {
+	const page = req.query.page || 1
+	const perPage = 8
+	const skip = (+page - 1) * perPage
+	const totalTests = await CompletedTest.countDocuments({user: userId})
+	const numOfPages = Math.ceil(totalTests / perPage)
+
+	let tests = CompletedTest.find({user: userId})
+	tests = tests.skip(skip).limit(perPage)
+	tests = await tests
+	return {tests, numOfPages}
 }
 
 

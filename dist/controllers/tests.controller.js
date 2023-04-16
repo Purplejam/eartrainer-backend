@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
+exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
 const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -60,3 +60,12 @@ const getProgressData = (req, res) => __awaiter(void 0, void 0, void 0, function
     res.status(http_status_codes_1.StatusCodes.OK).json({ stats: progressData.stats });
 });
 exports.getProgressData = getProgressData;
+const getProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.query;
+    if (!userId) {
+        throw new errors_1.BadRequestError('Please provide user ID');
+    }
+    const { tests, numOfPages } = yield (0, tests_service_1.progressHistoryService)(req, res, userId);
+    res.status(http_status_codes_1.StatusCodes.OK).json({ tests, numOfPages });
+});
+exports.getProgressHistory = getProgressHistory;

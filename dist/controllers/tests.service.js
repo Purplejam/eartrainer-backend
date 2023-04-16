@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.progressDataService = exports.getAllTestsService = void 0;
+exports.progressHistoryService = exports.progressDataService = exports.getAllTestsService = void 0;
 const TestSchema_1 = require("../models/TestSchema");
 const testDataMap_1 = require("../models/testDataMap");
 const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
+const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
 const techMap_1 = require("../models/techMap");
 const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { technique, complexity, name } = req.query;
@@ -53,15 +54,15 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
     if (req.user) {
         const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: req.user.id });
         const test = yield TestSchema_1.Test.findOne({ _id: testId });
-        const completedTest = yield ProgressDataSchema_1.CompletedTest.create({
+        const completedTest = yield CompletedTestSchema_1.CompletedTest.create({
             name: test.name,
             slug: test.slug,
             complexity: test.complexity,
             result: succeededTests,
             technique: test.technique,
-            test: test.id
+            test: test.id,
+            user: req.user.id
         });
-        progressData.completedTests.push(completedTest);
         if (techMap_1.techiqueMap.has(test.technique)) {
             const technique = techMap_1.techiqueMap.get(test.technique);
             const stats = progressData.stats[`${technique}`];
@@ -78,3 +79,15 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
     }
 });
 exports.progressDataService = progressDataService;
+const progressHistoryService = (req, res, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const page = req.query.page || 1;
+    const perPage = 8;
+    const skip = (+page - 1) * perPage;
+    const totalTests = yield CompletedTestSchema_1.CompletedTest.countDocuments({ user: userId });
+    const numOfPages = Math.ceil(totalTests / perPage);
+    let tests = CompletedTestSchema_1.CompletedTest.find({ user: userId });
+    tests = tests.skip(skip).limit(perPage);
+    tests = yield tests;
+    return { tests, numOfPages };
+});
+exports.progressHistoryService = progressHistoryService;
