@@ -47,6 +47,7 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
 	return {tests, totalTests}
 }
 
+//add some additional logic
 export const progressDataService = async(req: Request, res: Response, testId: string, succeededTests: number) => {
 	if(req.user) {
 		const progressData = await ProgressData.findOne({user: req.user.id})
@@ -81,7 +82,7 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 
 export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType) => {
 	const page = req.query.page || 1
-	const perPage = 8
+	const perPage = 6
 	const skip = (+page - 1) * perPage
 	const totalTests = await CompletedTest.countDocuments({user: userId})
 	const numOfPages = Math.ceil(totalTests / perPage)

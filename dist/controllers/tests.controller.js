@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
+exports.deleteProgressHistory = exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
 const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const tests_service_1 = require("./tests.service");
 const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
+const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {
@@ -69,3 +70,14 @@ const getProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, funct
     res.status(http_status_codes_1.StatusCodes.OK).json({ tests, numOfPages });
 });
 exports.getProgressHistory = getProgressHistory;
+const deleteProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user) {
+        const { id } = req.user;
+        const result = yield CompletedTestSchema_1.CompletedTest.deleteMany({ user: id });
+        res.status(http_status_codes_1.StatusCodes.OK).json({ result });
+    }
+    else {
+        throw new errors_1.BadRequestError('Please login');
+    }
+});
+exports.deleteProgressHistory = deleteProgressHistory;

@@ -11,5 +11,6 @@ router.route('/').get(tests_controller_1.getAllTests);
 router.route('/compare').post(authentication_1.authenticateUser, tests_controller_1.compareAnswers);
 router.route('/progress').get(tests_controller_1.getProgressData);
 router.route('/history').get(tests_controller_1.getProgressHistory);
+router.route('/delete-history').delete(authentication_1.authenticateUser, tests_controller_1.deleteProgressHistory);
 router.route('/:id').get(tests_controller_1.getSingleTest);
 exports.default = router;

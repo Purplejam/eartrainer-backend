@@ -81,7 +81,7 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
 exports.progressDataService = progressDataService;
 const progressHistoryService = (req, res, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const page = req.query.page || 1;
-    const perPage = 8;
+    const perPage = 6;
     const skip = (+page - 1) * perPage;
     const totalTests = yield CompletedTestSchema_1.CompletedTest.countDocuments({ user: userId });
     const numOfPages = Math.ceil(totalTests / perPage);

@@ -61,8 +61,17 @@ export const getProgressHistory = async (req: Request, res: Response) => {
 	if(!userId) {
 		throw new BadRequestError('Please provide user ID')
 	}
-
 	const {tests, numOfPages} = await progressHistoryService(req, res, userId)
 	res.status(StatusCodes.OK).json({tests, numOfPages})
+}
+
+export const deleteProgressHistory = async (req: Request, res: Response) => {
+	if(req.user) {
+		const {id} = req.user 
+		const result = await CompletedTest.deleteMany({user: id})
+		res.status(StatusCodes.OK).json({result})
+	} else {
+		throw new BadRequestError('Please login')
+	}
 }
 
