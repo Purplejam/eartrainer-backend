@@ -3,12 +3,13 @@ import {TestList} from '../models/TestListSchema'
 import {TestItem} from '../models/TestItemSchema'
 import {StatusCodes} from 'http-status-codes'
 import mongoose from 'mongoose'
-import {CustomAPIError, BadRequestError, NotFoundError} from '../errors'
+import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
 import {getAllTestsService, progressDataService, progressHistoryService} from './tests.service'
 import {Request, Response} from 'express'
 import { ProgressData } from '../models/ProgressDataSchema';
 import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
+import { ICompletedTest } from '../models/interfaces/CompletedTest.interface';
 
 export const getAllTests = async (req: Request, res: Response): Promise<void> => {
 	const {tests, totalTests} = await getAllTestsService(req, res)
@@ -48,19 +49,19 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 }
 
 export const getProgressData = async (req: Request, res: Response) => {
-	const {userId} = req.query
-	if(!userId) {
-		throw new BadRequestError('Please provide user ID')
+	if (!req.user) {
+		throw new UnauthenticatedError('Please log in')
 	}
+	const {id: userId} = req.user
 	const progressData = await ProgressData.findOne({user: userId})
 	res.status(StatusCodes.OK).json({stats: progressData.stats})
 }
 
 export const getProgressHistory = async (req: Request, res: Response) => {
-	const {userId} = req.query
-	if(!userId) {
-		throw new BadRequestError('Please provide user ID')
+	if (!req.user) {
+		throw new UnauthenticatedError('Please log in')
 	}
+	const {id: userId} = req.user
 	const {tests, numOfPages} = await progressHistoryService(req, res, userId)
 	res.status(StatusCodes.OK).json({tests, numOfPages})
 }
@@ -73,5 +74,18 @@ export const deleteProgressHistory = async (req: Request, res: Response) => {
 	} else {
 		throw new BadRequestError('Please login')
 	}
+}
+
+export const getTotalHistory = async (req: Request, res: Response) => {
+	if (!req.user) {
+		throw new UnauthenticatedError('Please log in')
+	}
+	const {id: userId} = req.user
+	const tests = await CompletedTest.find({user: userId})
+	const totalTests = tests.length
+	let answers = 0
+	tests.forEach((test: ICompletedTest) => answers += +test.result)
+
+	res.status(StatusCodes.OK).json({totalTests, answers})
 }
 

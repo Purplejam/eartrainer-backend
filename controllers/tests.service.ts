@@ -48,6 +48,8 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
 }
 
 //add some additional logic
+
+//add user page account
 export const progressDataService = async(req: Request, res: Response, testId: string, succeededTests: number) => {
 	if(req.user) {
 		const progressData = await ProgressData.findOne({user: req.user.id})
@@ -65,14 +67,19 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 		if(techiqueMap.has(test.technique)) {
 			const technique = techiqueMap.get(test.technique)
 			const stats = progressData.stats[`${technique}`]
+			if(stats === 10) {
+				return
+			}
 			//if success rate higher than ... and complexity >= stats
-			if(succeededTests >= 14 && test.complexity >= stats) {
+			if(succeededTests >= 14 && test.complexity > stats) {
 				if(succeededTests >= 17) {
 					progressData.stats[`${technique}`] = test.complexity
 				}
-				if(succeededTests >= 14 && succeededTests < 17) {
+				if(succeededTests < 17) {
 					progressData.stats[`${technique}`] += 0.5
 				}
+			} else if(succeededTests >= 17 && stats - test.complexity <= 2) {
+				progressData.stats[`${technique}`] += 0.25
 			}
 		}
 		await progressData.save()	

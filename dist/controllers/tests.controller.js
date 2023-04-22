@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProgressHistory = exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
+exports.getTotalHistory = exports.deleteProgressHistory = exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
 const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -53,19 +53,19 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.compareAnswers = compareAnswers;
 const getProgressData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.query;
-    if (!userId) {
-        throw new errors_1.BadRequestError('Please provide user ID');
+    if (!req.user) {
+        throw new errors_1.UnauthenticatedError('Please log in');
     }
+    const { id: userId } = req.user;
     const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: userId });
     res.status(http_status_codes_1.StatusCodes.OK).json({ stats: progressData.stats });
 });
 exports.getProgressData = getProgressData;
 const getProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.query;
-    if (!userId) {
-        throw new errors_1.BadRequestError('Please provide user ID');
+    if (!req.user) {
+        throw new errors_1.UnauthenticatedError('Please log in');
     }
+    const { id: userId } = req.user;
     const { tests, numOfPages } = yield (0, tests_service_1.progressHistoryService)(req, res, userId);
     res.status(http_status_codes_1.StatusCodes.OK).json({ tests, numOfPages });
 });
@@ -81,3 +81,15 @@ const deleteProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.deleteProgressHistory = deleteProgressHistory;
+const getTotalHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        throw new errors_1.UnauthenticatedError('Please log in');
+    }
+    const { id: userId } = req.user;
+    const tests = yield CompletedTestSchema_1.CompletedTest.find({ user: userId });
+    const totalTests = tests.length;
+    let answers = 0;
+    tests.forEach((test) => answers += +test.result);
+    res.status(http_status_codes_1.StatusCodes.OK).json({ totalTests, answers });
+});
+exports.getTotalHistory = getTotalHistory;

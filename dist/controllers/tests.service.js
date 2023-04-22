@@ -66,13 +66,19 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
         if (techMap_1.techiqueMap.has(test.technique)) {
             const technique = techMap_1.techiqueMap.get(test.technique);
             const stats = progressData.stats[`${technique}`];
-            if (succeededTests >= 14 && test.complexity >= stats) {
+            if (stats === 10) {
+                return;
+            }
+            if (succeededTests >= 14 && test.complexity > stats) {
                 if (succeededTests >= 17) {
                     progressData.stats[`${technique}`] = test.complexity;
                 }
-                if (succeededTests >= 14 && succeededTests < 17) {
+                if (succeededTests < 17) {
                     progressData.stats[`${technique}`] += 0.5;
                 }
+            }
+            else if (succeededTests >= 17 && stats - test.complexity <= 2) {
+                progressData.stats[`${technique}`] += 0.25;
             }
         }
         yield progressData.save();
