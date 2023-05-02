@@ -21,7 +21,7 @@ const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 8;
     const skip = (page - 1) * limit;
-    if (complexity && complexity !== '' && complexity !== 'Все') {
+    if (complexity && complexity !== '' && complexity !== 'All') {
         if (testDataMap_1.testDataMapComplexity.has(complexity)) {
             queryObject.complexity = testDataMap_1.testDataMapComplexity.get(complexity);
         }
@@ -29,7 +29,7 @@ const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, funct
             queryObject.complexity = { $gt: 0 };
         }
     }
-    if (technique && technique !== '' && technique !== 'Все') {
+    if (technique && technique !== '' && technique !== 'All') {
         queryObject.technique = technique;
     }
     if (name && name !== '') {
@@ -92,7 +92,7 @@ const progressHistoryService = (req, res, userId) => __awaiter(void 0, void 0, v
     const totalTests = yield CompletedTestSchema_1.CompletedTest.countDocuments({ user: userId });
     const numOfPages = Math.ceil(totalTests / perPage);
     let tests = CompletedTestSchema_1.CompletedTest.find({ user: userId });
-    tests = tests.skip(skip).limit(perPage);
+    tests = tests.sort('-createdAt').skip(skip).limit(perPage);
     tests = yield tests;
     return { tests, numOfPages };
 });

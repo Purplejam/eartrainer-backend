@@ -17,7 +17,7 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
  const limit = Number(req.query.limit) || 8
  const skip = (page - 1) * limit
 	
- if (complexity && complexity !== '' && complexity !== 'Все') {
+ if (complexity && complexity !== '' && complexity !== 'All') {
  	if(testDataMapComplexity.has(complexity)) {
  		queryObject.complexity = testDataMapComplexity.get(complexity)
  	} else {
@@ -25,7 +25,7 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
  	}
  }
 
- if (technique && technique !== '' && technique !== 'Все') { 
+ if (technique && technique !== '' && technique !== 'All') { 
  	queryObject.technique = technique
  }
  if (name && name !== '') {
@@ -95,7 +95,7 @@ export const progressHistoryService = async (req: Request, res: Response, userId
 	const numOfPages = Math.ceil(totalTests / perPage)
 
 	let tests = CompletedTest.find({user: userId})
-	tests = tests.skip(skip).limit(perPage)
+	tests = tests.sort('-createdAt').skip(skip).limit(perPage)
 	tests = await tests
 	return {tests, numOfPages}
 }

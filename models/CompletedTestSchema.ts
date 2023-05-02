@@ -28,7 +28,7 @@ export const CompletedTestSchema = new mongoose.Schema({
 		type: mongoose.Types.ObjectId,
 		ref: 'User',
 		required: true,
-	},
-})
+	}
+}, { timestamps: true })
 
 export const CompletedTest = mongoose.model('CompletedTest', CompletedTestSchema)

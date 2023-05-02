@@ -33,6 +33,6 @@ exports.CompletedTestSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Types.ObjectId,
         ref: 'User',
         required: true,
-    },
-});
+    }
+}, { timestamps: true });
 exports.CompletedTest = mongoose_1.default.model('CompletedTest', exports.CompletedTestSchema);
