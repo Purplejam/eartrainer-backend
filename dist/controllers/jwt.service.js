@@ -22,16 +22,18 @@ const attachCookiesToResponse = (res, user, refreshToken) => {
     const oneDay = 1000 * 60 * 60 * 24;
     const oneMonth = 1000 * 60 * 60 * 24 * 30;
     res.cookie('accessToken', accessTokenJWT, {
+        httpOnly: true,
         secure: true,
         signed: true,
         expires: new Date(Date.now() + oneDay),
-        domain: 'https://eartrainer-v2-frontend.vercel.app'
+        domain: 'eartrainer-v2-frontend.vercel.app'
     });
     res.cookie('refreshToken', refreshTokenJWT, {
+        httpOnly: true,
         secure: true,
         signed: true,
         expires: new Date(Date.now() + oneMonth),
-        domain: 'https://eartrainer-v2-frontend.vercel.app'
+        domain: 'eartrainer-v2-frontend.vercel.app'
     });
 };
 exports.attachCookiesToResponse = attachCookiesToResponse;

@@ -28,19 +28,19 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
   const oneMonth = 1000 * 60 * 60 * 24 * 30
 
   res.cookie('accessToken', accessTokenJWT, {
-    //httpOnly: true,
+    httpOnly: true,
     secure: true,
     signed: true,
     expires: new Date(Date.now() + oneDay), 
-    domain: 'https://eartrainer-v2-frontend.vercel.app'
+    domain: 'eartrainer-v2-frontend.vercel.app'
   })
 
   res.cookie('refreshToken', refreshTokenJWT, {
-    //httpOnly: true,
+    httpOnly: true,
     secure: true,
     signed: true,
     expires: new Date(Date.now() + oneMonth), 
-    domain: 'https://eartrainer-v2-frontend.vercel.app'
+    domain: 'eartrainer-v2-frontend.vercel.app'
   })
 }
 
