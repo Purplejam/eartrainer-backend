@@ -17,7 +17,7 @@ app.set('trust proxy', 1)
 
 //enable cors
 app.use(cors({
-    origin: ['https://eartrainer-v2-frontend.vercel.app'],
+    origin: ['https://eartrainer-v2-frontend.vercel.app/'],
     credentials: true,
 }))
 
