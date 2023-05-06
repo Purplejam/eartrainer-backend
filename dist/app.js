@@ -25,5 +25,8 @@ exports.app.use((0, cors_1.default)({
 exports.app.use(express_1.default.static('public'));
 exports.app.use('/api/v1/tests', testsRouter_1.default);
 exports.app.use('/api/v1/auth', authRouter_1.default);
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+});
 exports.app.use(notFound_1.notFoundMiddleware);
 exports.app.use(errorHandler_1.errorHandlerMiddleware);

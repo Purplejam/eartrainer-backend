@@ -32,8 +32,6 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
     signed: true,
     expires: new Date(Date.now() + oneDay), 
     secure: true,
-    sameSite: 'none',
-    domain: '.eartrainer-v2-frontend'
   })
 
   res.cookie('refreshToken', refreshTokenJWT, {
@@ -41,8 +39,6 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
     signed: true,
     expires: new Date(Date.now() + oneMonth), 
     secure: true,
-    sameSite: 'none',
-    domain: '.eartrainer-v2-frontend'
   })
 }
 
