@@ -24,6 +24,7 @@ app.use(cors({
 
 //static files
 app.use(express.static('public'))
+app.use(express.static(path.resolve(__dirname, './client/build')));
 
 //routes and error handlers
 app.use('/api/v1/tests', testRouter)
