@@ -32,7 +32,7 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
     secure: true,
     signed: true,
     expires: new Date(Date.now() + oneDay), 
-    domain: 'eartrainer-v2-frontend.vercel.app'
+    domain: '.eartrainer-v2-frontend.vercel.app'
   })
 
   res.cookie('refreshToken', refreshTokenJWT, {
@@ -40,7 +40,7 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
     secure: true,
     signed: true,
     expires: new Date(Date.now() + oneMonth), 
-    domain: 'eartrainer-v2-frontend.vercel.app'
+    domain: '.eartrainer-v2-frontend.vercel.app'
   })
 }
 
