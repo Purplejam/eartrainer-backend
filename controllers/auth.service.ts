@@ -65,7 +65,7 @@ export const forgotPasswordService = async(email: string) => {
     throw new BadRequestError('Please provide avalid email')
   }
   const passwordToken = crypto.randomBytes(20).toString('hex')
-  const origin = 'http://localhost:3000'
+  const origin = 'https://eartrainer-backend.onrender.com'
   await sendResetPasswordEmail(email, user.name, passwordToken, origin)
   const expOneDay = 1000 * 60 * 60 * 24 * 1
   const passwordTokenExpirationDate = new Date(Date.now() + expOneDay)

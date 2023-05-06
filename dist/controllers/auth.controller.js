@@ -28,7 +28,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!user) {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST);
     }
-    const origin = 'http://localhost:3000';
+    const origin = 'https://eartrainer-backend.onrender.com';
     yield (0, sendEmail_service_1.sendVerificationEmail)(user.email, user.name, origin, user.verificationToken);
     res.status(http_status_codes_1.StatusCodes.CREATED).json({
         msg: 'Success! Please verify your email',

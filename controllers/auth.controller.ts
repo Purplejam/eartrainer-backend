@@ -31,7 +31,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(StatusCodes.BAD_REQUEST)
   }
 
-  const origin = 'http://localhost:3000'
+  const origin = 'https://eartrainer-backend.onrender.com'
   await sendVerificationEmail(user.email, user.name, origin, user.verificationToken)
   res.status(StatusCodes.CREATED).json({
     msg: 'Success! Please verify your email', 
