@@ -34,6 +34,6 @@ export const sendResetPasswordEmail = async (email: string, name: string, passwo
 	const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`
 	const subject = 'Eartrainer | New password'
 	const text = 'Confirm your new password'
-	const html = `<strong>Confirm your password here: <a href=${verificationLink}>Новый пароль</a></strong>`
+	const html = `<strong>Confirm your password here: <a href=${verificationLink}>Set new password</a></strong>`
 	await sendEmailSendgrid(email, subject, text, html)
 }
