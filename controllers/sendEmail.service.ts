@@ -8,7 +8,7 @@ export const sendEmailSendgrid = async (to: string, subject: string, text: strin
 
 	const msg = {
 	  to, 
-	  from: 'info', 
+	  from: 'purplejamkiev@gmail.com', 
 	  subject,
 	  text,
 	  html,

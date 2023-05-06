@@ -19,7 +19,7 @@ const sendEmailSendgrid = (to, subject, text, html) => __awaiter(void 0, void 0,
     mail_1.default.setApiKey(apiKey);
     const msg = {
         to,
-        from: 'info',
+        from: 'purplejamkiev@gmail.com',
         subject,
         text,
         html,
