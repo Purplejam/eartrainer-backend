@@ -32,13 +32,15 @@ export const attachCookiesToResponse = (res: Response, user: ITokenUser, refresh
     secure: false,
     signed: true,
     expires: new Date(Date.now() + oneDay),
+    domain: '127.0.0.1'
   })
 
   res.cookie('refreshToken', refreshTokenJWT, {
     httpOnly: true,
     secure: false,
     signed: true,
-    expires: new Date(Date.now() + oneMonth)
+    expires: new Date(Date.now() + oneMonth), 
+    domain: '127.0.0.1'
   })
 }
 
