@@ -20,7 +20,7 @@ exports.app.use((0, cookie_parser_1.default)(process.env.JWT_SECRET));
 exports.app.set('trust proxy', 1);
 exports.app.use((0, cors_1.default)({
     origin: 'https://eartrainer-v2-frontend.vercel.app',
-    credentials: true,
+    credentials: true
 }));
 exports.app.use(express_1.default.static('public'));
 exports.app.use('/api/v1/tests', testsRouter_1.default);
