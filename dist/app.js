@@ -13,6 +13,7 @@ const authRouter_1 = __importDefault(require("./routes/authRouter"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
@@ -25,8 +26,8 @@ exports.app.use((0, cors_1.default)({
 exports.app.use(express_1.default.static('public'));
 exports.app.use('/api/v1/tests', testsRouter_1.default);
 exports.app.use('/api/v1/auth', authRouter_1.default);
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+exports.app.get('*', (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, './client/build', 'index.html'));
 });
 exports.app.use(notFound_1.notFoundMiddleware);
 exports.app.use(errorHandler_1.errorHandlerMiddleware);

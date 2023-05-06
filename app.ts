@@ -7,6 +7,7 @@ import authRouter from './routes/authRouter'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import path from 'path'
 dotenv.config()
 
 
@@ -27,6 +28,9 @@ app.use(express.static('public'))
 //routes and error handlers
 app.use('/api/v1/tests', testRouter)
 app.use('/api/v1/auth', authRouter)
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+});
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
