@@ -75,7 +75,7 @@ const forgotPasswordService = (email) => __awaiter(void 0, void 0, void 0, funct
         throw new errors_1.BadRequestError('Please provide avalid email');
     }
     const passwordToken = crypto_1.default.randomBytes(20).toString('hex');
-    const origin = 'https://eartrainer-backend.onrender.com';
+    const origin = 'https://earmentor.onrender.com';
     yield (0, sendEmail_service_1.sendResetPasswordEmail)(email, user.name, passwordToken, origin);
     const expOneDay = 1000 * 60 * 60 * 24 * 1;
     const passwordTokenExpirationDate = new Date(Date.now() + expOneDay);

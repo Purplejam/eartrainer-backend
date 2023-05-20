@@ -43,9 +43,9 @@ const sendVerificationEmail = (email, name, origin, verificationToken) => __awai
 exports.sendVerificationEmail = sendVerificationEmail;
 const sendResetPasswordEmail = (email, name, passwordToken, origin) => __awaiter(void 0, void 0, void 0, function* () {
     const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`;
-    const subject = 'Eartrainer | New password';
+    const subject = 'Eartrainer | Confirm new password';
     const text = 'Confirm your new password';
-    const html = `<strong>Confirm your password here: <a href=${verificationLink}>Новый пароль</a></strong>`;
+    const html = `<strong>To reset your old password, we need you to set up new password here: <a href=${verificationLink}>Set a new password</a></strong>`;
     yield (0, exports.sendEmailSendgrid)(email, subject, text, html);
 });
 exports.sendResetPasswordEmail = sendResetPasswordEmail;

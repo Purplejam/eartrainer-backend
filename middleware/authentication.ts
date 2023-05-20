@@ -34,7 +34,10 @@ export const authenticateUser = async(req: Request, res: Response, next: NextFun
       user: payload.user.id,
       refreshToken: payload.refreshToken
     })
-    if (!existingToken || !existingToken?.isValid) {
+    if (!existingToken) {
+      return next()  
+    }
+    if (!existingToken?.isValid) {
       throw new UnauthenticatedError('Authentication Invalid')
     }
     attachCookiesToResponse(

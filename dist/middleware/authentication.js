@@ -38,7 +38,10 @@ const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             user: payload.user.id,
             refreshToken: payload.refreshToken
         });
-        if (!existingToken || !(existingToken === null || existingToken === void 0 ? void 0 : existingToken.isValid)) {
+        if (!existingToken) {
+            return next();
+        }
+        if (!(existingToken === null || existingToken === void 0 ? void 0 : existingToken.isValid)) {
             throw new errors_1.UnauthenticatedError('Authentication Invalid');
         }
         (0, jwt_service_1.attachCookiesToResponse)(res, payload.user, existingToken.refreshToken);
