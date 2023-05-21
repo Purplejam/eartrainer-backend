@@ -48,7 +48,7 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 	res.status(StatusCodes.OK).json({succeededTests, result})
 }
 
-export const getProgressData = async (req: Request, res: Response) => {
+export const getProgressData = async (req: Request, res: Response): Promise<void>  => {
 	if (!req.user) {
 		throw new UnauthenticatedError('Please log in')
 	}
@@ -57,7 +57,7 @@ export const getProgressData = async (req: Request, res: Response) => {
 	res.status(StatusCodes.OK).json({stats: progressData.stats})
 }
 
-export const getProgressHistory = async (req: Request, res: Response) => {
+export const getProgressHistory = async (req: Request, res: Response): Promise<void>  => {
 	if (!req.user) {
 		throw new UnauthenticatedError('Please log in')
 	}
@@ -66,7 +66,7 @@ export const getProgressHistory = async (req: Request, res: Response) => {
 	res.status(StatusCodes.OK).json({tests, numOfPages})
 }
 
-export const deleteProgressHistory = async (req: Request, res: Response) => {
+export const deleteProgressHistory = async (req: Request, res: Response): Promise<void>  => {
 	if(req.user) {
 		const {id} = req.user 
 		const result = await CompletedTest.deleteMany({user: id})
@@ -76,7 +76,7 @@ export const deleteProgressHistory = async (req: Request, res: Response) => {
 	}
 }
 
-export const getTotalHistory = async (req: Request, res: Response) => {
+export const getTotalHistory = async (req: Request, res: Response): Promise<void>  => {
 	if (!req.user) {
 		throw new UnauthenticatedError('Please log in')
 	}
