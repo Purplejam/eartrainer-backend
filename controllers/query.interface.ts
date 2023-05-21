@@ -1,4 +1,4 @@
-import { stringParseType } from '../models/interfaces/stringParse.interface';
+import {stringParseType} from '../models/interfaces/stringParse.interface';
 
 export interface IQueryObject {
 	technique?: stringParseType,

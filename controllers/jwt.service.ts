@@ -1,6 +1,6 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
+import {ITokenUser} from './createTokenUser.interface'
 import {Request, Response} from 'express'
-import { ITokenUser } from './createTokenUser.interface';
 
 interface IPayloadJwt {
   payload: {

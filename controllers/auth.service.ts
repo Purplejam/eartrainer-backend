@@ -1,16 +1,19 @@
-import {User} from '../models/UserSchema'
 import crypto from 'crypto'
-import { BadRequestError, UnauthenticatedError } from '../errors';
-import { attachCookiesToResponse } from './jwt.service';
-import { createTokenUser } from './createTokenUser.service';
-import { Token } from '../models/TokenSchema';
-import {StatusCodes} from 'http-status-codes'
+import {attachCookiesToResponse} from './jwt.service'
+import {BadRequestError, UnauthenticatedError} from '../errors'
+import {createTokenUser} from './createTokenUser.service'
+import {hashString} from './createHash'
+import {ITokenUser} from './createTokenUser.interface'
+import {IUserSchema} from '../models/interfaces/UserSchema.interface'
+import {ProgressData} from '../models/ProgressDataSchema'
 import {Request, Response} from 'express'
-import { hashString } from './createHash'
-import { sendResetPasswordEmail } from './sendEmail.service';
-import { ProgressData } from '../models/ProgressDataSchema';
+import {sendResetPasswordEmail} from './sendEmail.service'
+import {StatusCodes} from 'http-status-codes'
+import {Token} from '../models/TokenSchema'
+import {User} from '../models/UserSchema'
 
-export const registerService = async(email: string, name: string, password: string) => {
+
+export const registerService = async(email: string, name: string, password: string): Promise<IUserSchema> => {
   const isFirstAccount = (await User.countDocuments({})) === 0
   const role = isFirstAccount ? 'admin' : 'user'
   const verificationToken = crypto.randomBytes(20).toString('hex')
@@ -19,7 +22,8 @@ export const registerService = async(email: string, name: string, password: stri
   return user
 }
 
-export const attachCookieService = async(req: Request, res: Response, user: any) => {
+
+export const attachCookieService = async(req: Request, res: Response, user: any): Promise<void | ITokenUser> => {
  const tokenUser = createTokenUser({name: user.name, id: user._id, role: user.role})
  let refreshToken = ''
  let existingToken = await Token.findOne({user: user._id})
@@ -44,7 +48,7 @@ export const attachCookieService = async(req: Request, res: Response, user: any)
 }
 
 
-export const logoutService = async(req: Request, res: Response) => {
+export const logoutService = async(req: Request, res: Response): Promise<void> => {
   await Token.findOneAndDelete({
     user: req.user?.id
   })
@@ -59,7 +63,8 @@ export const logoutService = async(req: Request, res: Response) => {
   })
 }
 
-export const forgotPasswordService = async(email: string) => {
+
+export const forgotPasswordService = async(email: string): Promise<void | string> => {
   const user = await User.findOne({email})
   if(!user) {
     throw new BadRequestError('Please provide avalid email')
@@ -75,7 +80,8 @@ export const forgotPasswordService = async(email: string) => {
   return passwordToken
 }
 
-export const resetPasswordService = async(passwordToken: string, password: string, email: string) => {
+
+export const resetPasswordService = async(passwordToken: string, password: string, email: string): Promise<void> => {
   const user = await User.findOne({email})
   if (!user) {
     throw new BadRequestError('Please provide avalid email');

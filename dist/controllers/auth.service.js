@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPasswordService = exports.forgotPasswordService = exports.logoutService = exports.attachCookieService = exports.registerService = void 0;
-const UserSchema_1 = require("../models/UserSchema");
 const crypto_1 = __importDefault(require("crypto"));
-const errors_1 = require("../errors");
 const jwt_service_1 = require("./jwt.service");
+const errors_1 = require("../errors");
 const createTokenUser_service_1 = require("./createTokenUser.service");
-const TokenSchema_1 = require("../models/TokenSchema");
 const createHash_1 = require("./createHash");
-const sendEmail_service_1 = require("./sendEmail.service");
 const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
+const sendEmail_service_1 = require("./sendEmail.service");
+const TokenSchema_1 = require("../models/TokenSchema");
+const UserSchema_1 = require("../models/UserSchema");
 const registerService = (email, name, password) => __awaiter(void 0, void 0, void 0, function* () {
     const isFirstAccount = (yield UserSchema_1.User.countDocuments({})) === 0;
     const role = isFirstAccount ? 'admin' : 'user';

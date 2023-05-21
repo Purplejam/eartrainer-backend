@@ -1,23 +1,25 @@
-import {StatusCodes} from 'http-status-codes'
-import mongoose from 'mongoose'
-import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
-import {Request, Response} from 'express'
-import {User} from '../models/UserSchema'
-import { sendResetPasswordEmail, sendVerificationEmail } from './sendEmail.service'
-import { attachCookieService, forgotPasswordService, logoutService, registerService, resetPasswordService } from './auth.service';
-import { createTokenUser } from './createTokenUser.service'
-import { Token } from '../models/TokenSchema'
 import crypto from 'crypto'
-import { attachCookiesToResponse } from './jwt.service'
-import { ITokenUser } from './createTokenUser.interface'
-import { hashString } from './createHash'
+import mongoose from 'mongoose'
+import {attachCookieService, forgotPasswordService, logoutService, registerService, resetPasswordService} from './auth.service';
+import {attachCookiesToResponse} from './jwt.service'
+import {createTokenUser} from './createTokenUser.service'
+import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
+import {hashString} from './createHash'
+import {ITokenUser} from './createTokenUser.interface'
+import {Request, Response} from 'express'
+import {sendResetPasswordEmail, sendVerificationEmail} from './sendEmail.service'
+import {StatusCodes} from 'http-status-codes'
+import {Token} from '../models/TokenSchema'
+import {User} from '../models/UserSchema'
+
 
 interface IVerifyParams {
   email: string,
   verificationToken: string
 }
 
-export const register = async (req: Request, res: Response) => {
+
+export const register = async (req: Request, res: Response): Promise<void | Response> => {
   const {email, name, password} = req.body
   if (!email || !name || !password) {
     throw new BadRequestError('Please provide email, name and password')
@@ -32,14 +34,15 @@ export const register = async (req: Request, res: Response) => {
   }
 
   const origin = 'https://earmentor.onrender.com'
-  await sendVerificationEmail(user.email, user.name, origin, user.verificationToken)
+  await sendVerificationEmail(user.email, user.name, origin, user.verificationToken as string)
   res.status(StatusCodes.CREATED).json({
     msg: 'Success! Please verify your email', 
     verificationToken: user.verificationToken
   })
 }
 
-export const login = async (req: Request, res: Response) => {
+
+export const login = async (req: Request, res: Response): Promise<void | Response> => {
   const { email, password } = req.body
   if (!email || !password) {
     throw new BadRequestError('Please provide email and password')
@@ -60,7 +63,8 @@ export const login = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json({user: tokenUser})
 }
 
-export const verifyUserEmail = async (req: Request<{}, {}, {}, IVerifyParams>, res: Response) => {
+
+export const verifyUserEmail = async (req: Request<{}, {}, {}, IVerifyParams>, res: Response): Promise<void | Response> => {
   const {verificationToken, email} = req.query
   if(!verificationToken || !email) {
     throw new BadRequestError('Please provide valid token and email')
@@ -82,7 +86,8 @@ export const verifyUserEmail = async (req: Request<{}, {}, {}, IVerifyParams>, r
   res.status(StatusCodes.OK).json({msg: 'Success! Email has been verified!'})
 }
 
-export const showCurrentUser = async(req: Request, res: Response) => {
+
+export const showCurrentUser = async(req: Request, res: Response): Promise<void | Response> => {
   if(req.user) {
     return res.status(StatusCodes.OK).json({user: req.user})
   } else {
@@ -90,12 +95,13 @@ export const showCurrentUser = async(req: Request, res: Response) => {
   }
 }
 
-export const logout = async(req: Request, res: Response) => {
+export const logout = async(req: Request, res: Response): Promise<void | Response> => {
   await logoutService(req, res)
   res.status(StatusCodes.OK).json({msg: 'User has logged out!'})
 }
 
-export const forgotPassword = async(req: Request, res: Response) => {
+
+export const forgotPassword = async(req: Request, res: Response): Promise<void | Response> => {
   const {email} = req.body
   if (!email) {
     throw new BadRequestError('Please provide a valid email')
@@ -104,7 +110,8 @@ export const forgotPassword = async(req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ msg: 'Please check your email for further actions'})
 }
 
-export const resetPassword = async(req: Request, res: Response) => {
+
+export const resetPassword = async(req: Request, res: Response): Promise<void | Response> => {
   const {passwordToken, password, email} = req.body
   if (!passwordToken || !password || !email) {
     throw new BadRequestError('Please provide all data')
@@ -112,11 +119,6 @@ export const resetPassword = async(req: Request, res: Response) => {
   await resetPasswordService(passwordToken, password, email)
   res.status(StatusCodes.OK).json({ msg: 'Success! Password reset' })
 }
-
-
-
-
-
 
 
 

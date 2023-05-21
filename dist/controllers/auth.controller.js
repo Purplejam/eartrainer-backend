@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = exports.forgotPassword = exports.logout = exports.showCurrentUser = exports.verifyUserEmail = exports.login = exports.register = void 0;
-const http_status_codes_1 = require("http-status-codes");
-const errors_1 = require("../errors");
-const UserSchema_1 = require("../models/UserSchema");
-const sendEmail_service_1 = require("./sendEmail.service");
 const auth_service_1 = require("./auth.service");
+const errors_1 = require("../errors");
+const sendEmail_service_1 = require("./sendEmail.service");
+const http_status_codes_1 = require("http-status-codes");
+const UserSchema_1 = require("../models/UserSchema");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, name, password } = req.body;
     if (!email || !name || !password) {

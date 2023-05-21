@@ -1,8 +1,8 @@
-import {Request, Response} from 'express'
 import dotenv from 'dotenv'
 import sgMail from '@sendgrid/mail'
+import {Request, Response} from 'express'
 
-export const sendEmailSendgrid = async (to: string, subject: string, text: string, html: string) => {
+export const sendEmailSendgrid = async (to: string, subject: string, text: string, html: string): Promise<void> => {
 	const apiKey = process.env.SENDGRID_API_KEY
 	sgMail.setApiKey(apiKey as string)
 
@@ -22,7 +22,7 @@ export const sendEmailSendgrid = async (to: string, subject: string, text: strin
 	  })
 }
 
-export const sendVerificationEmail = async (email: string, name: string, origin: string, verificationToken: string) => {
+export const sendVerificationEmail = async (email: string, name: string, origin: string, verificationToken: string): Promise<void>  => {
 	const verificationLink = `${origin}/verify-email?verificationToken=${verificationToken}&email=${email}`
 	const subject = 'Eartrainer | Verify your email addres'
 	const text = 'Verify your email address to complete registration'
@@ -30,7 +30,7 @@ export const sendVerificationEmail = async (email: string, name: string, origin:
 	await sendEmailSendgrid(email, subject, text, html)
 }
 
-export const sendResetPasswordEmail = async (email: string, name: string, passwordToken: string, origin: string) => {
+export const sendResetPasswordEmail = async (email: string, name: string, passwordToken: string, origin: string): Promise<void>  => {
 	const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`
 	const subject = 'Eartrainer | Confirm new password'
 	const text = 'Confirm your new password'

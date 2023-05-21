@@ -1,13 +1,13 @@
-import express, {Express} from 'express'
 import 'express-async-errors'
+import authRouter from './routes/authRouter'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import express, {Express} from 'express'
+import path from 'path'
+import testRouter from './routes/testsRouter'
 import {errorHandlerMiddleware} from './middleware/errorHandler'
 import {notFoundMiddleware} from './middleware/notFound'
-import testRouter from './routes/testsRouter'
-import authRouter from './routes/authRouter'
-import cors from 'cors'
-import cookieParser from 'cookie-parser'
-import dotenv from 'dotenv'
-import path from 'path'
 dotenv.config()
 
 
@@ -18,7 +18,7 @@ app.set('trust proxy', 1)
 
 //enable cors
 app.use(cors({
-    origin: 'https://eartrainer-v2-frontend.vercel.app',
+    origin: 'localhost',
     credentials: true
 }))
 
