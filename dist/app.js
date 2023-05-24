@@ -19,10 +19,7 @@ exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)(process.env.JWT_SECRET));
 exports.app.set('trust proxy', 1);
-exports.app.use((0, cors_1.default)({
-    origin: 'localhost',
-    credentials: true
-}));
+exports.app.use((0, cors_1.default)());
 exports.app.use(express_1.default.static('public'));
 exports.app.use(express_1.default.static(path_1.default.resolve(__dirname, './client/build')));
 exports.app.use('/api/v1/tests', testsRouter_1.default);
