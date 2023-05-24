@@ -14,4 +14,5 @@ router.route('/show-me').get(authentication_1.authenticateUser, auth_controller_
 router.route('/logout').patch(authentication_1.authenticateUser, auth_controller_1.logout);
 router.route('/forgot-password').post(auth_controller_1.forgotPassword);
 router.route('/reset-password').post(auth_controller_1.resetPassword);
+router.route('/subscribe').post(auth_controller_1.subscribeUser);
 exports.default = router;

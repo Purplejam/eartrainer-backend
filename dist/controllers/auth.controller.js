@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgotPassword = exports.logout = exports.showCurrentUser = exports.verifyUserEmail = exports.login = exports.register = void 0;
+exports.subscribeUser = exports.resetPassword = exports.forgotPassword = exports.logout = exports.showCurrentUser = exports.verifyUserEmail = exports.login = exports.register = void 0;
 const auth_service_1 = require("./auth.service");
 const errors_1 = require("../errors");
 const sendEmail_service_1 = require("./sendEmail.service");
 const http_status_codes_1 = require("http-status-codes");
 const UserSchema_1 = require("../models/UserSchema");
+const SubscribtionSchema_1 = require("../models/SubscribtionSchema");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, name, password } = req.body;
     if (!email || !name || !password) {
@@ -105,9 +106,24 @@ exports.forgotPassword = forgotPassword;
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { passwordToken, password, email } = req.body;
     if (!passwordToken || !password || !email) {
-        throw new errors_1.BadRequestError('Please provide all data');
+        throw new errors_1.BadRequestError('Please provide all required data');
     }
     yield (0, auth_service_1.resetPasswordService)(passwordToken, password, email);
     res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Success! Password reset' });
 });
 exports.resetPassword = resetPassword;
+const subscribeUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    if (!email) {
+        throw new errors_1.BadRequestError('Please provide all required data');
+    }
+    const existingEmail = yield SubscribtionSchema_1.Subscribtion.findOne({ email });
+    if (existingEmail) {
+        throw new errors_1.BadRequestError('You are already subscribed!');
+    }
+    const newSubscribtion = yield SubscribtionSchema_1.Subscribtion.create({
+        email, isValid: true
+    });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Success! You are subscribed!' });
+});
+exports.subscribeUser = subscribeUser;

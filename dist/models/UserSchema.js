@@ -18,23 +18,23 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 exports.UserSchema = new mongoose_1.default.Schema({
     name: {
         type: String,
-        required: [true, 'Please provide name'],
+        required: [true, 'Please, provide name'],
         minlength: 3,
         maxlength: 50,
     },
     email: {
         type: String,
         unique: true,
-        required: [true, 'Please provide email'],
+        required: [true, 'Please, provide email'],
     },
     password: {
         type: String,
-        required: [true, 'Please provide password'],
+        required: [true, 'Please, provide password'],
         minlength: 6,
     },
     role: {
         type: String,
-        enum: ['admin', 'user'],
+        enum: ['admin', 'user', 'testUser'],
         default: 'user',
     },
     verificationToken: {

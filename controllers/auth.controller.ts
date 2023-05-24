@@ -11,6 +11,7 @@ import {sendResetPasswordEmail, sendVerificationEmail} from './sendEmail.service
 import {StatusCodes} from 'http-status-codes'
 import {Token} from '../models/TokenSchema'
 import {User} from '../models/UserSchema'
+import {Subscribtion} from '../models/SubscribtionSchema'
 
 
 interface IVerifyParams {
@@ -114,10 +115,26 @@ export const forgotPassword = async(req: Request, res: Response): Promise<void |
 export const resetPassword = async(req: Request, res: Response): Promise<void | Response> => {
   const {passwordToken, password, email} = req.body
   if (!passwordToken || !password || !email) {
-    throw new BadRequestError('Please provide all data')
+    throw new BadRequestError('Please provide all required data')
   }
   await resetPasswordService(passwordToken, password, email)
   res.status(StatusCodes.OK).json({ msg: 'Success! Password reset' })
+}
+
+
+export const subscribeUser = async(req: Request, res: Response): Promise<void | Response> => {
+  const {email} = req.body
+  if(!email) {
+    throw new BadRequestError('Please provide all required data')
+  }
+  const existingEmail = await Subscribtion.findOne({email})
+  if(existingEmail) {
+    throw new BadRequestError('You are already subscribed!')
+  }
+  const newSubscribtion = await Subscribtion.create({
+    email, isValid: true
+  })
+  res.status(StatusCodes.OK).json({ msg: 'Success! You are subscribed!' })
 }
 
 
