@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.progressHistoryService = exports.progressDataService = exports.getAllTestsService = void 0;
+exports.getTotalHistoryService = exports.progressHistoryService = exports.progressDataService = exports.getAllTestsService = void 0;
 const TestSchema_1 = require("../models/TestSchema");
 const testDataMap_1 = require("../models/testDataMap");
 const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
@@ -97,3 +97,11 @@ const progressHistoryService = (req, res, userId) => __awaiter(void 0, void 0, v
     return { tests, numOfPages };
 });
 exports.progressHistoryService = progressHistoryService;
+const getTotalHistoryService = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const tests = yield CompletedTestSchema_1.CompletedTest.find({ user: userId });
+    const totalTests = tests.length;
+    let answers = 0;
+    tests.forEach((test) => answers += +test.result);
+    return { totalTests, answers };
+});
+exports.getTotalHistoryService = getTotalHistoryService;

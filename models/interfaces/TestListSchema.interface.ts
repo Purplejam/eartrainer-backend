@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 import { ITestItem } from './TestItem.interface'
 
 export interface ITestListSchema extends mongoose.Document {
-	tests: ITestItem[]
+	tests: ITestItem[], 
+	compareAnswers: Function
 }
 
 export interface ISingleAnswer {

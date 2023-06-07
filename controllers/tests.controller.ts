@@ -4,12 +4,13 @@ import {TestItem} from '../models/TestItemSchema'
 import {StatusCodes} from 'http-status-codes'
 import mongoose from 'mongoose'
 import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
-import {getAllTestsService, progressDataService, progressHistoryService} from './tests.service'
+import {getAllTestsService, getTotalHistoryService, progressDataService, progressHistoryService} from './tests.service'
 import {Request, Response} from 'express'
-import { ProgressData } from '../models/ProgressDataSchema';
+import { ProgressData } from '../models/ProgressDataSchema'
 import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
-import { ICompletedTest } from '../models/interfaces/CompletedTest.interface';
+import { ICompletedTest } from '../models/interfaces/CompletedTest.interface'
+import { getSingleTestRepository, getProgressDataRepository, deleteCompletedTestRepository } from './tests.repository'
 
 export const getAllTests = async (req: Request, res: Response): Promise<void> => {
 	const {tests, totalTests} = await getAllTestsService(req, res)
@@ -19,10 +20,9 @@ export const getAllTests = async (req: Request, res: Response): Promise<void> =>
 	res.status(StatusCodes.OK).json({tests, totalTests})
 }
 
-
 export const getSingleTest = async (req: Request, res: Response): Promise<void>  => {
 	const {id: testId} = req.params
-	const testList = await TestList.findOne({testId})
+	const testList = await getSingleTestRepository(testId)
 	if(!testList) {
 		throw new BadRequestError('Please provide correct test id')
 	}
@@ -34,7 +34,7 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 	if(!answerList || !testId) {
 		throw new BadRequestError('Please provide correct data')
 	}
-	const testList = await TestList.findOne({testId})
+	const testList = await getSingleTestRepository(testId)
 	if(!testList) {
 		throw new BadRequestError('Please provide correct test ID')
 	}
@@ -53,8 +53,8 @@ export const getProgressData = async (req: Request, res: Response): Promise<void
 		throw new UnauthenticatedError('Please log in')
 	}
 	const {id: userId} = req.user
-	const progressData = await ProgressData.findOne({user: userId})
-	res.status(StatusCodes.OK).json({stats: progressData.stats})
+	const progressData = await getProgressDataRepository(userId)
+	res.status(StatusCodes.OK).json({stats: progressData?.stats})
 }
 
 export const getProgressHistory = async (req: Request, res: Response): Promise<void>  => {
@@ -69,7 +69,7 @@ export const getProgressHistory = async (req: Request, res: Response): Promise<v
 export const deleteProgressHistory = async (req: Request, res: Response): Promise<void>  => {
 	if(req.user) {
 		const {id} = req.user 
-		const result = await CompletedTest.deleteMany({user: id})
+		const result = await deleteCompletedTestRepository(id)
 		res.status(StatusCodes.OK).json({result})
 	} else {
 		throw new BadRequestError('Please login')
@@ -81,10 +81,7 @@ export const getTotalHistory = async (req: Request, res: Response): Promise<void
 		throw new UnauthenticatedError('Please log in')
 	}
 	const {id: userId} = req.user
-	const tests = await CompletedTest.find({user: userId})
-	const totalTests = tests.length
-	let answers = 0
-	tests.forEach((test: ICompletedTest) => answers += +test.result)
+	const {totalTests, answers} = await getTotalHistoryService(userId)
 
 	res.status(StatusCodes.OK).json({totalTests, answers})
 }

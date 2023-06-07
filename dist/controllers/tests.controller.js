@@ -10,12 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTotalHistory = exports.deleteProgressHistory = exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
-const TestListSchema_1 = require("../models/TestListSchema");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const tests_service_1 = require("./tests.service");
-const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
-const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
+const tests_repository_1 = require("./tests.repository");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {
@@ -26,7 +24,7 @@ const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getAllTests = getAllTests;
 const getSingleTest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id: testId } = req.params;
-    const testList = yield TestListSchema_1.TestList.findOne({ testId });
+    const testList = yield (0, tests_repository_1.getSingleTestRepository)(testId);
     if (!testList) {
         throw new errors_1.BadRequestError('Please provide correct test id');
     }
@@ -38,7 +36,7 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (!answerList || !testId) {
         throw new errors_1.BadRequestError('Please provide correct data');
     }
-    const testList = yield TestListSchema_1.TestList.findOne({ testId });
+    const testList = yield (0, tests_repository_1.getSingleTestRepository)(testId);
     if (!testList) {
         throw new errors_1.BadRequestError('Please provide correct test ID');
     }
@@ -57,8 +55,8 @@ const getProgressData = (req, res) => __awaiter(void 0, void 0, void 0, function
         throw new errors_1.UnauthenticatedError('Please log in');
     }
     const { id: userId } = req.user;
-    const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: userId });
-    res.status(http_status_codes_1.StatusCodes.OK).json({ stats: progressData.stats });
+    const progressData = yield (0, tests_repository_1.getProgressDataRepository)(userId);
+    res.status(http_status_codes_1.StatusCodes.OK).json({ stats: progressData === null || progressData === void 0 ? void 0 : progressData.stats });
 });
 exports.getProgressData = getProgressData;
 const getProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -73,7 +71,7 @@ exports.getProgressHistory = getProgressHistory;
 const deleteProgressHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.user) {
         const { id } = req.user;
-        const result = yield CompletedTestSchema_1.CompletedTest.deleteMany({ user: id });
+        const result = yield (0, tests_repository_1.deleteCompletedTestRepository)(id);
         res.status(http_status_codes_1.StatusCodes.OK).json({ result });
     }
     else {
@@ -86,10 +84,7 @@ const getTotalHistory = (req, res) => __awaiter(void 0, void 0, void 0, function
         throw new errors_1.UnauthenticatedError('Please log in');
     }
     const { id: userId } = req.user;
-    const tests = yield CompletedTestSchema_1.CompletedTest.find({ user: userId });
-    const totalTests = tests.length;
-    let answers = 0;
-    tests.forEach((test) => answers += +test.result);
+    const { totalTests, answers } = yield (0, tests_service_1.getTotalHistoryService)(userId);
     res.status(http_status_codes_1.StatusCodes.OK).json({ totalTests, answers });
 });
 exports.getTotalHistory = getTotalHistory;

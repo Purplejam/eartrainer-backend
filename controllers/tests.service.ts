@@ -8,7 +8,8 @@ import {ITestServiceReturn} from './testsService.interface'
 import { ProgressData } from '../models/ProgressDataSchema'
 import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
-import { stringParseType } from '../models/interfaces/stringParse.interface';
+import { stringParseType } from '../models/interfaces/stringParse.interface'
+import { ICompletedTest } from '../models/interfaces/CompletedTest.interface'
 
 export const getAllTestsService = async (req: Request, res: Response): Promise<ITestServiceReturn> => {
 	const {technique, complexity, name} = req.query
@@ -50,7 +51,7 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
 //add some additional logic
 
 //add user page account
-export const progressDataService = async(req: Request, res: Response, testId: string, succeededTests: number) => {
+export const progressDataService = async(req: Request, res: Response, testId: string, succeededTests: number): Promise<void> => {
 	if(req.user) {
 		const progressData = await ProgressData.findOne({user: req.user.id})
 		const test = await Test.findOne({_id: testId})
@@ -87,7 +88,7 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 }
 
 
-export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType) => {
+export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType): Promise<{tests: ICompletedTest[], numOfPages: number }> => {
 	const page = req.query.page || 1
 	const perPage = 6
 	const skip = (+page - 1) * perPage
@@ -100,6 +101,14 @@ export const progressHistoryService = async (req: Request, res: Response, userId
 	return {tests, numOfPages}
 }
 
+export const getTotalHistoryService = async (userId: string): Promise<{totalTests: any, answers: number}> => {
+	const tests = await CompletedTest.find({user: userId})
+	const totalTests = tests.length
+	let answers = 0
+	tests.forEach((test: ICompletedTest) => answers += +test.result)
+
+	return {totalTests, answers}
+}
 
 
 
