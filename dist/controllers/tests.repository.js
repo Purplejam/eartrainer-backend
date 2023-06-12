@@ -9,15 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCompletedTestRepository = exports.getProgressDataRepository = exports.getSingleTestRepository = void 0;
+exports.deleteCompletedTestRepository = exports.getProgressDataRepository = exports.getSingleTestListRepository = exports.getSingleTestRepository = void 0;
+const TestSchema_1 = require("../models/TestSchema");
 const TestListSchema_1 = require("../models/TestListSchema");
 const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
 const getSingleTestRepository = (testId) => __awaiter(void 0, void 0, void 0, function* () {
+    const test = yield TestSchema_1.Test.findOne({ _id: testId });
+    return test;
+});
+exports.getSingleTestRepository = getSingleTestRepository;
+const getSingleTestListRepository = (testId) => __awaiter(void 0, void 0, void 0, function* () {
     const testList = yield TestListSchema_1.TestList.findOne({ testId });
     return testList;
 });
-exports.getSingleTestRepository = getSingleTestRepository;
+exports.getSingleTestListRepository = getSingleTestListRepository;
 const getProgressDataRepository = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: userId });
     return progressData;

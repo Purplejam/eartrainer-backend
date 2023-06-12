@@ -24,7 +24,7 @@ const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getAllTests = getAllTests;
 const getSingleTest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id: testId } = req.params;
-    const testList = yield (0, tests_repository_1.getSingleTestRepository)(testId);
+    const testList = yield (0, tests_repository_1.getSingleTestListRepository)(testId);
     if (!testList) {
         throw new errors_1.BadRequestError('Please provide correct test id');
     }
@@ -36,7 +36,7 @@ const compareAnswers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (!answerList || !testId) {
         throw new errors_1.BadRequestError('Please provide correct data');
     }
-    const testList = yield (0, tests_repository_1.getSingleTestRepository)(testId);
+    const testList = yield (0, tests_repository_1.getSingleTestListRepository)(testId);
     if (!testList) {
         throw new errors_1.BadRequestError('Please provide correct test ID');
     }

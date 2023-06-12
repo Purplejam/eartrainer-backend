@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import {ITestSchema} from './interfaces/TestSchema.interface';
 
-export const TestSchema = new mongoose.Schema({
+export const TestSchema = new mongoose.Schema<ITestSchema>({
 	slug: {
 		type: String,
 		required: true,

@@ -10,7 +10,7 @@ import { ProgressData } from '../models/ProgressDataSchema'
 import { CompletedTest } from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
 import { ICompletedTest } from '../models/interfaces/CompletedTest.interface'
-import { getSingleTestRepository, getProgressDataRepository, deleteCompletedTestRepository } from './tests.repository'
+import { getSingleTestListRepository, getProgressDataRepository, deleteCompletedTestRepository } from './tests.repository'
 
 export const getAllTests = async (req: Request, res: Response): Promise<void> => {
 	const {tests, totalTests} = await getAllTestsService(req, res)
@@ -22,7 +22,7 @@ export const getAllTests = async (req: Request, res: Response): Promise<void> =>
 
 export const getSingleTest = async (req: Request, res: Response): Promise<void>  => {
 	const {id: testId} = req.params
-	const testList = await getSingleTestRepository(testId)
+	const testList = await getSingleTestListRepository(testId)
 	if(!testList) {
 		throw new BadRequestError('Please provide correct test id')
 	}
@@ -34,7 +34,7 @@ export const compareAnswers = async (req: Request, res: Response): Promise<void>
 	if(!answerList || !testId) {
 		throw new BadRequestError('Please provide correct data')
 	}
-	const testList = await getSingleTestRepository(testId)
+	const testList = await getSingleTestListRepository(testId)
 	if(!testList) {
 		throw new BadRequestError('Please provide correct test ID')
 	}

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import { ISubscription } from './interfaces/Subscription.interface';
 
-export const SubscribtionSchema = new mongoose.Schema({
+export const SubscribtionSchema = new mongoose.Schema<ISubscription>({
 	email: {
 		type: String,
 		required: true

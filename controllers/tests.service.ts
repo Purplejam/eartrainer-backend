@@ -5,15 +5,15 @@ import {testDataMapComplexity, testDataMapSorting} from '../models/testDataMap'
 import {Request, Response} from 'express'
 import {IQueryObject} from './query.interface'
 import {ITestServiceReturn} from './testsService.interface'
-import { ProgressData } from '../models/ProgressDataSchema'
-import { CompletedTest } from '../models/CompletedTestSchema'
+import {ProgressData} from '../models/ProgressDataSchema'
+import {CompletedTest} from '../models/CompletedTestSchema'
 import {techiqueMap} from '../models/techMap'
-import { stringParseType } from '../models/interfaces/stringParse.interface'
-import { ICompletedTest } from '../models/interfaces/CompletedTest.interface'
+import {stringParseType} from '../models/interfaces/stringParse.interface'
+import {ICompletedTest} from '../models/interfaces/CompletedTest.interface'
 
 export const getAllTestsService = async (req: Request, res: Response): Promise<ITestServiceReturn> => {
 	const {technique, complexity, name} = req.query
-	let queryObject: IQueryObject = {}
+	let queryObject: any = {}
 	const page = Number(req.query.page) || 1
  const limit = Number(req.query.limit) || 8
  const skip = (page - 1) * limit
@@ -92,10 +92,10 @@ export const progressHistoryService = async (req: Request, res: Response, userId
 	const page = req.query.page || 1
 	const perPage = 6
 	const skip = (+page - 1) * perPage
-	const totalTests = await CompletedTest.countDocuments({user: userId})
+	const totalTests = await CompletedTest.countDocuments({user: userId as string})
 	const numOfPages = Math.ceil(totalTests / perPage)
 
-	let tests = CompletedTest.find({user: userId})
+	let tests = CompletedTest.find({user: userId as string})
 	tests = tests.sort('-createdAt').skip(skip).limit(perPage)
 	tests = await tests
 	return {tests, numOfPages}
