@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCompletedTestRepository = exports.getProgressDataRepository = exports.getSingleTestListRepository = exports.getSingleTestRepository = void 0;
-const TestSchema_1 = require("../models/TestSchema");
-const TestListSchema_1 = require("../models/TestListSchema");
-const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
+const TestListSchema_1 = require("../models/TestListSchema");
+const TestSchema_1 = require("../models/TestSchema");
 const getSingleTestRepository = (testId) => __awaiter(void 0, void 0, void 0, function* () {
     const test = yield TestSchema_1.Test.findOne({ _id: testId });
     return test;

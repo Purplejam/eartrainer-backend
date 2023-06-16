@@ -1,5 +1,8 @@
 import mongoose from 'mongoose'
 
 export interface ITestItemSchema extends mongoose.Document {
-	correct?: string
+	id: string,
+	correct?: string,	
+	question: string, 
+	audio: string
 }

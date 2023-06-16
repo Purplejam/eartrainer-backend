@@ -1,13 +1,7 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
-import {ITokenUser} from './createTokenUser.interface'
+import {IPayloadJwt} from './interfaces/jwtPayload.interface'
+import {ITokenUser} from './interfaces/createTokenUser.interface'
 import {Request, Response} from 'express'
-
-interface IPayloadJwt {
-  payload: {
-    user: ITokenUser,
-    refreshToken?: string
-  } 
-}
 
 export const createJWT = ({payload}: IPayloadJwt) => {
   const secret = process.env.JWT_SECRET

@@ -1,15 +1,16 @@
-import {Test} from '../models/TestSchema'
-import {TestList} from '../models/TestListSchema'
-import {TestItem} from '../models/TestItemSchema'
-import {testDataMapComplexity, testDataMapSorting} from '../models/testDataMap'
-import {Request, Response} from 'express'
-import {IQueryObject} from './query.interface'
-import {ITestServiceReturn} from './testsService.interface'
-import {ProgressData} from '../models/ProgressDataSchema'
 import {CompletedTest} from '../models/CompletedTestSchema'
-import {techiqueMap} from '../models/techMap'
+import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
+import {ICompletedTestSchema} from '../models/interfaces/CompletedTest.interface'
+import {IQueryObject} from './interfaces/query.interface'
+import {ITestServiceReturn} from './interfaces/testsService.interface'
+import {ProgressData} from '../models/ProgressDataSchema'
+import {Request, Response} from 'express'
 import {stringParseType} from '../models/interfaces/stringParse.interface'
-import {ICompletedTest} from '../models/interfaces/CompletedTest.interface'
+import {techiqueMap} from '../models/techMap'
+import {testDataMapComplexity, testDataMapSorting} from '../models/testDataMap'
+import {TestItem} from '../models/TestItemSchema'
+import {TestList} from '../models/TestListSchema'
+import {Test} from '../models/TestSchema'
 
 export const getAllTestsService = async (req: Request, res: Response): Promise<ITestServiceReturn> => {
 	const {technique, complexity, name} = req.query
@@ -48,13 +49,14 @@ export const getAllTestsService = async (req: Request, res: Response): Promise<I
 	return {tests, totalTests}
 }
 
-//add some additional logic
-
 //add user page account
 export const progressDataService = async(req: Request, res: Response, testId: string, succeededTests: number): Promise<void> => {
 	if(req.user) {
 		const progressData = await ProgressData.findOne({user: req.user.id})
 		const test = await Test.findOne({_id: testId})
+		if(!test) {
+			throw new BadRequestError('Provide correct data')
+		}
 		const completedTest = await CompletedTest.create({
 			name: test.name,
 			slug: test.slug,
@@ -88,7 +90,7 @@ export const progressDataService = async(req: Request, res: Response, testId: st
 }
 
 
-export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType): Promise<{tests: ICompletedTest[], numOfPages: number }> => {
+export const progressHistoryService = async (req: Request, res: Response, userId: stringParseType): Promise<{tests: ICompletedTestSchema[], numOfPages: number }> => {
 	const page = req.query.page || 1
 	const perPage = 6
 	const skip = (+page - 1) * perPage
@@ -105,13 +107,10 @@ export const getTotalHistoryService = async (userId: string): Promise<{totalTest
 	const tests = await CompletedTest.find({user: userId})
 	const totalTests = tests.length
 	let answers = 0
-	tests.forEach((test: ICompletedTest) => answers += +test.result)
+	tests.forEach((test: ICompletedTestSchema) => answers += +test.result)
 
 	return {totalTests, answers}
 }
-
-
-
 
 
 

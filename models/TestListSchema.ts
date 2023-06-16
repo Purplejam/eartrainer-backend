@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import {TestItemSchema} from './TestItemSchema'
 import {compareTestsService} from './TestListSchema.service'
 import {ITestListSchema, ISingleAnswer} from './interfaces/TestListSchema.interface'
-import { ICompareServiceReturn } from './interfaces/compareService.interface';
+import {ICompareServiceReturn} from './interfaces/compareService.interface'
 
 export const TestListSchema = new mongoose.Schema<ITestListSchema>({
 	testId: {

@@ -3,6 +3,7 @@ import { ITestItem } from './TestItem.interface'
 
 export interface ITestListSchema extends mongoose.Document {
 	tests: ITestItem[], 
+	testId: string,
 	compareAnswers: Function
 }
 

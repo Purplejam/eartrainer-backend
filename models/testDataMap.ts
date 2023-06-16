@@ -1,4 +1,4 @@
-import { stringParseType } from './interfaces/stringParse.interface'
+import {stringParseType} from './interfaces/stringParse.interface'
 
 export const testDataMapComplexity = new Map<stringParseType, object>([
 	['Beginner', {$gt: 1, $lt: 5}], 

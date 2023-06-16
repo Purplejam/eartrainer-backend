@@ -1,4 +1,4 @@
-import { ITokenUser } from './controllers/createTokenUser.interface';
+import {ITokenUser} from './controllers/interfaces/createTokenUser.interface'
 
 
 

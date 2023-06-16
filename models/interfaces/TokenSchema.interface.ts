@@ -1,4 +1,4 @@
-export interface IToken  {
+export interface ITokenSchema  {
 	refreshToken: string, 
 	ip: string,
 	userAgent: string,

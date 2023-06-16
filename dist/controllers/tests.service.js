@@ -10,11 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTotalHistoryService = exports.progressHistoryService = exports.progressDataService = exports.getAllTestsService = void 0;
-const TestSchema_1 = require("../models/TestSchema");
-const testDataMap_1 = require("../models/testDataMap");
-const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const CompletedTestSchema_1 = require("../models/CompletedTestSchema");
+const errors_1 = require("../errors");
+const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const techMap_1 = require("../models/techMap");
+const testDataMap_1 = require("../models/testDataMap");
+const TestSchema_1 = require("../models/TestSchema");
 const getAllTestsService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { technique, complexity, name } = req.query;
     let queryObject = {};
@@ -54,6 +55,9 @@ const progressDataService = (req, res, testId, succeededTests) => __awaiter(void
     if (req.user) {
         const progressData = yield ProgressDataSchema_1.ProgressData.findOne({ user: req.user.id });
         const test = yield TestSchema_1.Test.findOne({ _id: testId });
+        if (!test) {
+            throw new errors_1.BadRequestError('Provide correct data');
+        }
         const completedTest = yield CompletedTestSchema_1.CompletedTest.create({
             name: test.name,
             slug: test.slug,

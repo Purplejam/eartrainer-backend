@@ -1,9 +1,9 @@
 import {Request, Response, NextFunction} from 'express'
-import { attachCookiesToResponse, isTokenValid } from '../controllers/jwt.service';
+import {attachCookiesToResponse, isTokenValid} from '../controllers/jwt.service'
 import {JwtPayload} from 'jsonwebtoken'
-import { ITokenUser } from '../controllers/createTokenUser.interface';
-import { UnauthenticatedError } from '../errors';
-import { Token } from '../models/TokenSchema';
+import {ITokenUser} from '../controllers/interfaces/createTokenUser.interface'
+import {UnauthenticatedError} from '../errors'
+import {Token} from '../models/TokenSchema'
 
 export interface IUserDataReq extends Request{
   user: ITokenUser

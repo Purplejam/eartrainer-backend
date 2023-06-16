@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import { IToken } from './interfaces/TokenSchema.interface';
+import {ITokenSchema} from './interfaces/TokenSchema.interface'
 
-export const TokenSchema = new mongoose.Schema<IToken>({
+export const TokenSchema = new mongoose.Schema<ITokenSchema>({
 	refreshToken: {
 		type: String,
 		required: true

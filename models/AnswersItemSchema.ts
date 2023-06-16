@@ -1,13 +1,10 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 //answer array schema
-const AnswersSchema = new mongoose.Schema({
+export const AnswersSchema = new mongoose.Schema({
 	answer: {
 		type: String,
 	}
 })
 
-
-module.exports = {
-	AnswersSchema
-}
+export const AnswerData = mongoose.model('AnswerData', AnswersSchema)

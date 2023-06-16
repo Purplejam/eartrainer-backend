@@ -1,4 +1,6 @@
-export interface ITestSchema {
+import mongoose from 'mongoose'
+
+export interface ITestSchema extends mongoose.Document {
 	slug: string,
 	quantity: number, 
 	name: string, 

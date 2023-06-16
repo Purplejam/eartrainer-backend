@@ -18,23 +18,22 @@ const jwt_service_1 = require("./jwt.service");
 const errors_1 = require("../errors");
 const createTokenUser_service_1 = require("./createTokenUser.service");
 const createHash_1 = require("./createHash");
-const ProgressDataSchema_1 = require("../models/ProgressDataSchema");
 const sendEmail_service_1 = require("./sendEmail.service");
 const TokenSchema_1 = require("../models/TokenSchema");
 const UserSchema_1 = require("../models/UserSchema");
+const auth_repository_1 = require("./auth.repository");
 const registerService = (email, name, password) => __awaiter(void 0, void 0, void 0, function* () {
     const isFirstAccount = (yield UserSchema_1.User.countDocuments({})) === 0;
     const role = isFirstAccount ? 'admin' : 'user';
     const verificationToken = crypto_1.default.randomBytes(20).toString('hex');
-    const user = yield UserSchema_1.User.create({ name, email, password, role, verificationToken });
-    const progressData = yield ProgressDataSchema_1.ProgressData.create({ user: user.id });
+    const user = yield (0, auth_repository_1.createUserRepository)({ name, email, password, role, verificationToken });
     return user;
 });
 exports.registerService = registerService;
 const attachCookieService = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
     const tokenUser = (0, createTokenUser_service_1.createTokenUser)({ name: user.name, id: user._id, role: user.role });
     let refreshToken = '';
-    let existingToken = yield TokenSchema_1.Token.findOne({ user: user._id });
+    let existingToken = yield (0, auth_repository_1.findTokenRepository)(user._id);
     if (existingToken) {
         const { isValid } = existingToken;
         if (!isValid) {
@@ -47,8 +46,14 @@ const attachCookieService = (req, res, user) => __awaiter(void 0, void 0, void 0
         refreshToken = crypto_1.default.randomBytes(20).toString('hex');
         const userAgent = req.headers['user-agent'];
         const ip = req.ip;
-        const userToken = { refreshToken, ip, userAgent, user: user._id };
-        yield TokenSchema_1.Token.create(userToken);
+        const userToken = {
+            refreshToken,
+            isValid: true,
+            ip,
+            userAgent,
+            user: user._id
+        };
+        yield (0, auth_repository_1.createTokenRepository)(userToken);
         (0, jwt_service_1.attachCookiesToResponse)(res, tokenUser, refreshToken);
     }
     return tokenUser;
@@ -70,7 +75,7 @@ const logoutService = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.logoutService = logoutService;
 const forgotPasswordService = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield UserSchema_1.User.findOne({ email });
+    const user = yield (0, auth_repository_1.findUserRepository)(email);
     if (!user) {
         throw new errors_1.BadRequestError('Please provide avalid email');
     }
@@ -86,16 +91,16 @@ const forgotPasswordService = (email) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.forgotPasswordService = forgotPasswordService;
 const resetPasswordService = (passwordToken, password, email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield UserSchema_1.User.findOne({ email });
+    const user = yield (0, auth_repository_1.findUserRepository)(email);
     if (!user) {
         throw new errors_1.BadRequestError('Please provide avalid email');
     }
     const currentDate = new Date(Date.now());
     if (user.passwordToken === (0, createHash_1.hashString)(passwordToken) &&
-        currentDate < user.passwordTokenExpirationDate) {
+        currentDate < (user === null || user === void 0 ? void 0 : user.passwordTokenExpirationDate)) {
         user.password = password;
         user.passwordTokenExpirationDate = null;
-        user.passwordToken = null;
+        user.passwordToken = '';
         yield user.save();
     }
 });

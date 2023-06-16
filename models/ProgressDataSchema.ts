@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import {IProgressDataSchema} from './interfaces/ProgressData.interface'
 
-export const ProgressDataSchema = new mongoose.Schema({
+export const ProgressDataSchema = new mongoose.Schema<IProgressDataSchema>({
 	user: {
 		type: mongoose.Types.ObjectId,
 		ref: 'User',

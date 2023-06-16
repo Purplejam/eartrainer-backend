@@ -1,47 +1,46 @@
 import mongoose from 'mongoose'
-import {ITokenUser} from './createTokenUser.interface'
+import {INewSubscription} from './interfaces/newSubscription.interface'
+import {INewUser} from './interfaces/newUser.interface'
+import {ISubscriptionSchema} from '../models/interfaces/Subscription.interface'
+import {ITokenSchema} from '../models/interfaces/TokenSchema.interface'
+import {ITokenUser} from './interfaces/createTokenUser.interface'
+import {IUserSchema} from '../models/interfaces/UserSchema.interface'
+import {ProgressData} from '../models/ProgressDataSchema'
+import {Subscribtion} from '../models/SubscribtionSchema'
 import {Token} from '../models/TokenSchema'
 import {User} from '../models/UserSchema'
-import {Subscribtion} from '../models/SubscribtionSchema'
-import { IUserSchema } from '../models/interfaces/UserSchema.interface';
-import { ISubscription } from '../models/interfaces/Subscription.interface';
-import { IToken } from '../models/interfaces/TokenSchema.interface';
 
-interface INewUser {
-	name: string,
-	email: string,
-	password: string, 
-	role: string, 
-	verificationToken: string
-}
-
-
-const findUserRepository = async (email: string): Promise <void | IUserSchema> => {
+export const findUserRepository = async (email: string): Promise <void | IUserSchema> => {
 	const user = await User.findOne({email})
 	return user
 }
 
-const createUserRepository = async ({name, email, password, role, verificationToken}: INewUser): Promise<void | IUserSchema> => {
+export const createUserRepository = async ({name, email, password, role, verificationToken}: INewUser): Promise<IUserSchema> => {
 	const user = await User.create({name, email, password, role, verificationToken})
+	const progressData = await ProgressData.create({user: user?.id})
 	return user
 }
 
-const findSubscriptionRepository = async (email: string): Promise<void | ISubscription> => {
+export const findSubscriptionRepository = async (email: string): Promise<void | ISubscriptionSchema> => {
 	const subscription = await Subscribtion.findOne({email})
 	return subscription
 }
 
-const createSubscriptionRepository = async ({email, isValid}: ISubscription): Promise<void | ISubscription> => {
+export const createSubscriptionRepository = async ({email, isValid}: INewSubscription): Promise<void | ISubscriptionSchema> => {
 	const subscription = await Subscribtion.create({email, isValid})
 	return subscription
 }
 
-const findTokenRepository = async (user: string): Promise<void | IToken> => {
+export const findTokenRepository = async (user: string): Promise<void | ITokenSchema> => {
 	const token = await Token.findOne({user})
 	return token
 }
 
-const createTokenRepository = async ({refreshToken, ip, userAgent, user}: IToken): Promise<void | IToken> => {
+export const deleteTokenRepository = async (user: string): Promise<void> => {
+	const token = await Token.findOneAndDelete({user})
+}
+
+export const createTokenRepository = async ({refreshToken, ip, userAgent, user}: ITokenSchema): Promise<void | ITokenUser> => {
 	const token = await Token.create({refreshToken, ip, userAgent, user})
 	return token
 }

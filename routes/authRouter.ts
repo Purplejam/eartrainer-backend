@@ -1,6 +1,6 @@
 import express, {Router} from 'express'
-import { forgotPassword, login, logout, register, resetPassword, verifyUserEmail, showCurrentUser, subscribeUser} from '../controllers/auth.controller'
-import { authenticateUser } from '../middleware/authentication';
+import {authenticateUser} from '../middleware/authentication'
+import {forgotPassword, login, logout, register, resetPassword, verifyUserEmail, showCurrentUser, subscribeUser} from '../controllers/auth.controller'
 
 const router: Router = express.Router()
 

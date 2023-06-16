@@ -1,5 +1,5 @@
 import {CustomAPIError} from '../errors'
-import { StatusCodes } from 'http-status-codes'
+import {StatusCodes} from 'http-status-codes'
 import {Request, Response, NextFunction} from 'express'
 
 

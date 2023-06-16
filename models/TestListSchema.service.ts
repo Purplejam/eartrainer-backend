@@ -1,6 +1,6 @@
-import { IAnswerObject, ISingleAnswer } from './interfaces/TestListSchema.interface';
-import { ITestItem } from './interfaces/TestItem.interface';
-import { ICompareServiceReturn } from './interfaces/compareService.interface';
+import {IAnswerObject, ISingleAnswer} from './interfaces/TestListSchema.interface'
+import {ITestItem} from './interfaces/TestItem.interface'
+import {ICompareServiceReturn} from './interfaces/compareService.interface'
 
 export const compareTestsService = async (answerList: ISingleAnswer[], testsData: ITestItem[]): Promise<ICompareServiceReturn> => {
 	let result = <ITestItem[]>[]

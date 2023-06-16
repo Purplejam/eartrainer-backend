@@ -1,4 +1,6 @@
-export interface ICompletedTest {
+import mongoose from 'mongoose'
+
+export interface ICompletedTestSchema extends mongoose.Document {
 	name: string,
 	slug: string,
 	complexity: string,

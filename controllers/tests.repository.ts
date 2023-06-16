@@ -1,12 +1,12 @@
-import {Test} from '../models/TestSchema'
-import {TestList} from '../models/TestListSchema'
-import {TestItem} from '../models/TestItemSchema'
 import mongoose from 'mongoose'
-import {ITestListSchema} from '../models/interfaces/TestListSchema.interface'
-import {IProgressData} from '../models/interfaces/ProgressData.interface'
-import {ProgressData} from '../models/ProgressDataSchema'
 import {CompletedTest} from '../models/CompletedTestSchema'
+import {IProgressDataSchema} from '../models/interfaces/ProgressData.interface'
+import {ITestListSchema} from '../models/interfaces/TestListSchema.interface'
 import {ITestSchema} from '../models/interfaces/TestSchema.interface'
+import {ProgressData} from '../models/ProgressDataSchema'
+import {TestItem} from '../models/TestItemSchema'
+import {TestList} from '../models/TestListSchema'
+import {Test} from '../models/TestSchema'
 
 export const getSingleTestRepository = async (testId: string): Promise<ITestSchema | null> => {
 	const test = await Test.findOne({_id: testId})
@@ -18,7 +18,7 @@ export const getSingleTestListRepository = async (testId: string): Promise<ITest
 	return testList
 }
 
-export const getProgressDataRepository = async (userId: string): Promise<IProgressData | null> => {
+export const getProgressDataRepository = async (userId: string): Promise<IProgressDataSchema | null> => {
 	const progressData = await ProgressData.findOne({user: userId})
 	return progressData
 }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import {ICompletedTest} from './interfaces/CompletedTest.interface';
+import {ICompletedTestSchema} from './interfaces/CompletedTest.interface'
 
-export const CompletedTestSchema = new mongoose.Schema<ICompletedTest>({
+export const CompletedTestSchema = new mongoose.Schema<ICompletedTestSchema>({
 	name: {
 		type: String
 	},

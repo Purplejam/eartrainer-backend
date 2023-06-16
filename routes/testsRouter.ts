@@ -1,7 +1,6 @@
 import express, {Router} from 'express'
-import { deleteProgressHistory, getAllTests, 
-getSingleTest, compareAnswers, getProgressData, getProgressHistory, getTotalHistory} from '../controllers/tests.controller'
-import { authenticateUser } from '../middleware/authentication'
+import {authenticateUser} from '../middleware/authentication'
+import {deleteProgressHistory, getAllTests, getSingleTest, compareAnswers, getProgressData, getProgressHistory, getTotalHistory} from '../controllers/tests.controller'
 
 
 const router: Router = express.Router()

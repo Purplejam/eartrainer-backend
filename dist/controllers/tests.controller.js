@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTotalHistory = exports.deleteProgressHistory = exports.getProgressHistory = exports.getProgressData = exports.compareAnswers = exports.getSingleTest = exports.getAllTests = void 0;
-const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const tests_service_1 = require("./tests.service");
 const tests_repository_1 = require("./tests.repository");
+const http_status_codes_1 = require("http-status-codes");
 const getAllTests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tests, totalTests } = yield (0, tests_service_1.getAllTestsService)(req, res);
     if (!tests) {

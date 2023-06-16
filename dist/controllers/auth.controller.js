@@ -11,11 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.subscribeUser = exports.resetPassword = exports.forgotPassword = exports.logout = exports.showCurrentUser = exports.verifyUserEmail = exports.login = exports.register = void 0;
 const auth_service_1 = require("./auth.service");
+const auth_repository_1 = require("./auth.repository");
 const errors_1 = require("../errors");
 const sendEmail_service_1 = require("./sendEmail.service");
 const http_status_codes_1 = require("http-status-codes");
 const UserSchema_1 = require("../models/UserSchema");
-const SubscribtionSchema_1 = require("../models/SubscribtionSchema");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, name, password } = req.body;
     if (!email || !name || !password) {
@@ -117,11 +117,11 @@ const subscribeUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (!email) {
         throw new errors_1.BadRequestError('Please provide all required data');
     }
-    const existingEmail = yield SubscribtionSchema_1.Subscribtion.findOne({ email });
+    const existingEmail = yield (0, auth_repository_1.findSubscriptionRepository)(email);
     if (existingEmail) {
         throw new errors_1.BadRequestError('You are already subscribed!');
     }
-    const newSubscribtion = yield SubscribtionSchema_1.Subscribtion.create({
+    const newSubscribtion = yield (0, auth_repository_1.createSubscriptionRepository)({
         email, isValid: true
     });
     res.status(http_status_codes_1.StatusCodes.OK).json({ msg: 'Success! You are subscribed!' });

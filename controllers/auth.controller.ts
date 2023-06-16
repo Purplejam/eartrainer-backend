@@ -2,23 +2,18 @@ import crypto from 'crypto'
 import mongoose from 'mongoose'
 import {attachCookieService, forgotPasswordService, logoutService, registerService, resetPasswordService} from './auth.service';
 import {attachCookiesToResponse} from './jwt.service'
+import {createSubscriptionRepository, findSubscriptionRepository} from './auth.repository'
 import {createTokenUser} from './createTokenUser.service'
 import {CustomAPIError, BadRequestError, NotFoundError, UnauthenticatedError} from '../errors'
 import {hashString} from './createHash'
-import {ITokenUser} from './createTokenUser.interface'
+import {ITokenUser} from './interfaces/createTokenUser.interface'
+import {IVerifyParams} from './interfaces/query.interface';
 import {Request, Response} from 'express'
 import {sendResetPasswordEmail, sendVerificationEmail} from './sendEmail.service'
 import {StatusCodes} from 'http-status-codes'
+import {Subscribtion} from '../models/SubscribtionSchema'
 import {Token} from '../models/TokenSchema'
 import {User} from '../models/UserSchema'
-import {Subscribtion} from '../models/SubscribtionSchema'
-
-
-interface IVerifyParams {
-  email: string,
-  verificationToken: string
-}
-
 
 export const register = async (req: Request, res: Response): Promise<void | Response> => {
   const {email, name, password} = req.body
@@ -96,6 +91,7 @@ export const showCurrentUser = async(req: Request, res: Response): Promise<void 
   }
 }
 
+
 export const logout = async(req: Request, res: Response): Promise<void | Response> => {
   await logoutService(req, res)
   res.status(StatusCodes.OK).json({msg: 'User has logged out!'})
@@ -127,11 +123,11 @@ export const subscribeUser = async(req: Request, res: Response): Promise<void | 
   if(!email) {
     throw new BadRequestError('Please provide all required data')
   }
-  const existingEmail = await Subscribtion.findOne({email})
+  const existingEmail = await findSubscriptionRepository(email)
   if(existingEmail) {
     throw new BadRequestError('You are already subscribed!')
   }
-  const newSubscribtion = await Subscribtion.create({
+  const newSubscribtion = await createSubscriptionRepository({
     email, isValid: true
   })
   res.status(StatusCodes.OK).json({ msg: 'Success! You are subscribed!' })
