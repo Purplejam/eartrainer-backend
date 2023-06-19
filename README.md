@@ -1,4 +1,4 @@
-# Project Name
+# Earmentor Application
 
 ## Tech Stack
 
@@ -8,7 +8,7 @@
 
 This project is an online education platform designed specifically for music students to enhance their aural skills through tests and quizzes. The platform provides a variety of interactive exercises to help students develop their ability to identify and understand musical elements (harmonic or technical) by ear.
 
-### Screenshots
+### Screenshot
 
 ![Screenshot 1](./screenshots/image-1.png)
 
