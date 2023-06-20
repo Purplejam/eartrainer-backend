@@ -1,6 +1,7 @@
 # Earmentor Application
+[earmentor.app](https://earmentor.onrender.com/)
 
-## Tech Stack
+## Tech Stack (MERN)
 
 ![Node](https://img.shields.io/badge/Node-%5E14.20.1-green) ![Express](https://img.shields.io/badge/Express-%5E4.17.1-green) ![React](https://img.shields.io/badge/React-%5E18.0.2-green) ![Typescript](https://img.shields.io/badge/Typescript-%5E4.3.5-green) ![Redux](https://img.shields.io/badge/Redux-%5E4.1.0-green) ![Styled Components](https://img.shields.io/badge/Styled_Components-%5E5.3.0-green) ![Material UI](https://img.shields.io/badge/Material_UI-%5E5.0.0-green)
 
