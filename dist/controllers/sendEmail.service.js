@@ -36,7 +36,7 @@ const sendEmailSendgrid = (to, subject, text, html) => __awaiter(void 0, void 0,
 exports.sendEmailSendgrid = sendEmailSendgrid;
 const sendVerificationEmail = (email, name, origin, verificationToken) => __awaiter(void 0, void 0, void 0, function* () {
     const verificationLink = `${origin}/verify-email?verificationToken=${verificationToken}&email=${email}`;
-    const subject = 'Earmentor | Verify Your Email';
+    const subject = 'EARMENTOR | Verify Your Email';
     const text = 'Verify Your Email Address To Complete Registration';
     const html = `<strong>To complete your registration, we need you to verify your email address: <a href=${verificationLink}>Verify email</a></strong>`;
     yield (0, exports.sendEmailSendgrid)(email, subject, text, html);
@@ -44,7 +44,7 @@ const sendVerificationEmail = (email, name, origin, verificationToken) => __awai
 exports.sendVerificationEmail = sendVerificationEmail;
 const sendResetPasswordEmail = (email, name, passwordToken, origin) => __awaiter(void 0, void 0, void 0, function* () {
     const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`;
-    const subject = 'Earmentor | Confirm New Password';
+    const subject = 'EARMENTOR | Confirm New Password';
     const text = 'Confirm Your New Password';
     const html = `<strong>To reset your old password, please set up a new password here: <a href=${verificationLink}>Set a new password</a></strong>`;
     yield (0, exports.sendEmailSendgrid)(email, subject, text, html);

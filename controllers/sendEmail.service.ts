@@ -25,7 +25,7 @@ export const sendEmailSendgrid = async (to: string, subject: string, text: strin
 
 export const sendVerificationEmail = async (email: string, name: string, origin: string, verificationToken: string): Promise<void>  => {
 	const verificationLink = `${origin}/verify-email?verificationToken=${verificationToken}&email=${email}`
-	const subject = 'Earmentor | Verify Your Email'
+	const subject = 'EARMENTOR | Verify Your Email'
 	const text = 'Verify Your Email Address To Complete Registration'
 	const html = `<strong>To complete your registration, we need you to verify your email address: <a href=${verificationLink}>Verify email</a></strong>`
 	await sendEmailSendgrid(email, subject, text, html)
@@ -33,7 +33,7 @@ export const sendVerificationEmail = async (email: string, name: string, origin:
 
 export const sendResetPasswordEmail = async (email: string, name: string, passwordToken: string, origin: string): Promise<void>  => {
 	const verificationLink = `${origin}/reset-password?passwordToken=${passwordToken}&email=${email}`
-	const subject = 'Earmentor | Confirm New Password'
+	const subject = 'EARMENTOR | Confirm New Password'
 	const text = 'Confirm Your New Password'
 	const html = `<strong>To reset your old password, please set up a new password here: <a href=${verificationLink}>Set a new password</a></strong>`
 	await sendEmailSendgrid(email, subject, text, html)
