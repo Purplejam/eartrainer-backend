@@ -16,13 +16,12 @@ app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET as string));
 app.set('trust proxy', 1)
 
-//enable cors
-/*app.use(cors({
-    origin: 'localhost',
-    credentials: true
-}))*/
 
-app.use(cors())
+app.use(cors({
+    origin: 'https://eartrainer-v2-frontend.vercel.app/',
+    credentials: true
+}))
+
 
 //static files
 app.use(express.static('public'))
